@@ -27,7 +27,7 @@ namespace lispic {
      Reader::Reader() { }
      Reader::~Reader() { }
      void Reader::clear_blanks(string& str, size_t& index) {
-	  int i = 0;
+	  unsigned int i = 0;
 	  while ( i < str.length() && is_blank(str.at(i))  ) ++i;
 	  str.erase(0, i);
      }
@@ -44,7 +44,7 @@ namespace lispic {
 	  }
      }
      string Reader::read_string(string& str) {
-	  int i = 1;
+	  unsigned int i = 1;
 	  while (str.at(i) != QQ) ++i; 
 	  string sub = str.substr(0, i++) + '\"'; // returns string "it's me!"
 	  str.erase(0, i);
@@ -84,7 +84,8 @@ namespace lispic {
 		    }
 		    break;
 	       default:
-		    s_exp += SPACE;
+	        if (parenthesis_count > 0)	
+		    	s_exp += SPACE;
 		    s_exp += read_atom(str);
 		    clear_blanks(str, i);
 		    if (parenthesis_count > 0) {
@@ -107,8 +108,27 @@ namespace lispic {
 	  
 	  return *this;
      }
-     Reader& Reader::operator >> (string str) {
-	  
+
+     std::istream& operator >> (std::istream& in, Reader& reader) {
+	  char ch;
+	  int open_parenthesis = 0;
+	  string summary;
+	  do {
+	       in.get(ch);
+	       switch (ch) {
+	       case LP:
+		    open_parenthesis++;
+		    break;
+	       case RP:
+		    open_parenthesis--;
+		    break;
+	       default:
+		    break;
+	       }
+	       summary += ch;
+	  } while (open_parenthesis > 0 && ch != '\n');
+	  reader << summary;
+	  return in;
      }
      
      std::ostream& operator << (std::ostream& out, Reader& reader) {

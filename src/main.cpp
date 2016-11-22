@@ -5,10 +5,13 @@ using namespace lispic;
 
 int main() {
      Reader reader;
-     string str = "(+   2(- 12 7 )1 2 3   ) hi \"this is the end\" 23";
-     reader << str;
-     while (reader.has_some()) {
-	  std::cout << reader << std::endl;
+     string tmp;
+     int n = 10;
+     while (true) {
+	  std::cout << "> ";
+	  std::cin >> reader;
+	  while(reader.has_some())
+	       std::cout << reader << std::endl;
      }
      
      return 0;

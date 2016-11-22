@@ -10,3 +10,8 @@ reader: read.o $(SRC_DIR)/main.cpp
 
 read.o: $(SRC_DIR)/read.cpp $(HEADERS_DIR)/read.h
 	$(CC) $(KEYS) -o $(OBJ_DIR)/read.o -c $(SRC_DIR)/read.cpp -I$(SRC_DIR) -I$(HEADERS_DIR)
+
+clear:
+	rm -f $(SRC_DIR)/*~
+	rm -f $(HEADERS_DIR)/*~
+	rm -f *~

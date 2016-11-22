@@ -18,6 +18,7 @@ namespace lispic {
 	  string read_string(string&);
 	  string read_symbol(string&);
 	  friend std::ostream& operator << (std::ostream& , Reader& );
+	  friend std::istream& operator >> (std::istream&, Reader&);
      public:
 	  Reader();
 	  ~Reader();
