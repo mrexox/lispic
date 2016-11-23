@@ -5,11 +5,11 @@
 namespace lispic {
      enum SYMBOL : char {
 	  LP = '(', RP = ')',
-	       LF = '\n', SPACE = ' ', TAB = '\t', //blank characters
-	       DOT = '.',
-	       QQ = '\"',
+	  LF = '\n', SPACE = ' ', TAB = '\t', //blank characters
+	  DOT = '.',
+	  QQ = '\"',
 	       
-	       };
+     };
 
      string to_upper (string str) {
 	  std::locale loc;
@@ -51,7 +51,7 @@ namespace lispic {
 	  return sub;
      }
      string Reader::read_symbol(string& str) {
-	  int i = 0;
+	  unsigned int i = 0;
 	  while ( i < str.length()
 		  && !is_blank(str.at(i)) 
 		  && str.at(i) != RP 
@@ -66,7 +66,7 @@ namespace lispic {
 	  try {
 	       clear_blanks(str, i);
 
-	       switch ( str.at(i) ) {
+	       switch ( str.at(0) ) {
 	       case LP:
 		    parenthesis_count++;
 		    s_exp += LP; 
@@ -84,8 +84,8 @@ namespace lispic {
 		    }
 		    break;
 	       default:
-	        if (parenthesis_count > 0)	
-		    	s_exp += SPACE;
+		    if (parenthesis_count > 0)	
+			 s_exp += SPACE;
 		    s_exp += read_atom(str);
 		    clear_blanks(str, i);
 		    if (parenthesis_count > 0) {
@@ -113,8 +113,8 @@ namespace lispic {
 	  char ch;
 	  int open_parenthesis = 0;
 	  string summary;
-	  do {
-	       in.get(ch);
+	  in.get(ch);
+	  while (open_parenthesis > 0 || ch != '\n') {
 	       switch (ch) {
 	       case LP:
 		    open_parenthesis++;
@@ -126,13 +126,14 @@ namespace lispic {
 		    break;
 	       }
 	       summary += ch;
-	  } while (open_parenthesis > 0 && ch != '\n');
+	       in.get(ch);
+	  } 
 	  reader << summary;
 	  return in;
      }
      
      std::ostream& operator << (std::ostream& out, Reader& reader) {
-	  out << reader.s_expressions.top();
+	  out << reader.s_expressions.front();
 	  reader.s_expressions.pop();
 	  return out;
      }

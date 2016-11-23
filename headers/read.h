@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include <ctype.h>
 #include <sstream>
-#include <stack>
+#include <queue>
 #include <stdexcept>
 using std::string;
 
@@ -10,7 +10,7 @@ namespace lispic {
      
      class Reader {
      private:
-	  std::stack<string> s_expressions;
+	  std::queue<string> s_expressions;
 	  string eat_s_expression(string&, unsigned int);
 	  bool is_blank(char);
 	  void clear_blanks(string&, size_t&);
