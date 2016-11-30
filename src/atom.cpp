@@ -1,15 +1,16 @@
-#include "types.h"
+#include "Atom.h"
+
 namespace lispic {
      // Classes' methods
-     void atom::cast_values_or_die(atom& src) {
-	  if (my_type != NUMBER) {
+     void Atom::cast_values_or_die(Atom& src) {
+	  if (type != NUMBER) {
 	       try {
 		    dvalue = std::stod(svalue);
 	       } catch (std::invalid_argument e) {
 		    throw bad_cast_to_number();
 	       }
 	  }
-	  if (src.my_type != NUMBER) {
+	  if (src.type != NUMBER) {
 	       try {
 		    src.dvalue = std::stod(src.svalue);
 	       } catch (std::invalid_argument e) {
@@ -17,34 +18,34 @@ namespace lispic {
 	       }
 	  }
      }
-     atom& atom::operator + (atom& another) {
+     Atom& Atom::operator + (Atom& another) {
 	  cast_values_or_die(another);
 	  dvalue += another.dvalue;
 	  return *this;
      }
-     atom& atom::operator - (atom& another) {
+     Atom& Atom::operator - (Atom& another) {
 	  cast_values_or_die(another);
 	  dvalue -= another.dvalue;
 	  return *this;
      }
-     atom& operator / (atom& another) {
+     Atom& operator / (Atom& another) {
 	  cast_values_or_die(another);
 	  dvalue /= another.dvalue;
 	  return *this;
      }
-     atom& operator % (atom& another) {
+     Atom& operator % (Atom& another) {
 	  cast_values_or_die(another);
 	  dvalue %= another.dvalue;
 	  return *this;
      }
-     atom& operator * (atom& another) {
+     Atom& operator * (Atom& another) {
 	  cast_values_or_die(another);
 	  dvalue *= another.dvalue;
 	  return *this
      }
      // Exceptions' methods
      // Other functions
-     atom& concat (atom& atom1, atom& atom2) {
+     Atom& concat (Atom& atom1, Atom& atom2) {
 	  atom1.svalue += atom2.svalue;
 	  return atom1;
      }

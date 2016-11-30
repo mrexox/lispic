@@ -1,31 +1,25 @@
 #include "read.h"
 #include <locale>
 
-
 namespace lispic {
-     enum SYMBOL : char {
+     
+     enum symbol_char : char {
 	  LP = '(', RP = ')',
 	  LF = '\n', SPACE = ' ', TAB = '\t', //blank characters
 	  DOT = '.',
 	  QQ = '\"',
-	       
      };
-
+     
      string to_upper (string str) {
 	  std::locale loc;
 	  string tmpstr;
-	  std::stringstream ss;
-  
+	  
 	  for (string::size_type i = 0; i < str.length(); ++i) {
-	       ss << std::toupper(str[i], loc);
+	       tmpstr += std::toupper(str[i], loc);
 	  }
-
-	  ss >> tmpstr;
+	  
 	  return tmpstr;
      }
-
-     Reader::Reader() { }
-     Reader::~Reader() { }
      void Reader::clear_blanks(string& str, size_t& index) {
 	  unsigned int i = 0;
 	  while ( i < str.length() && is_blank(str.at(i))  ) ++i;
@@ -103,7 +97,7 @@ namespace lispic {
      }
      Reader& Reader::operator << (string str) {
 	  do {
-	       s_expressions.push(eat_s_expression(str));
+	       s_expressions.push(to_upper(eat_s_expression(str))); // use to_upper or not?
 	  } while (!str.empty());
 	  
 	  return *this;
@@ -113,8 +107,8 @@ namespace lispic {
 	  char ch;
 	  int open_parenthesis = 0;
 	  string summary;
-	  in.get(ch);
-	  while (open_parenthesis > 0 || ch != '\n') {
+
+	  while (in.get(ch) && (open_parenthesis > 0 || ch != '\n')) {
 	       switch (ch) {
 	       case LP:
 		    open_parenthesis++;
@@ -126,7 +120,6 @@ namespace lispic {
 		    break;
 	       }
 	       summary += ch;
-	       in.get(ch);
 	  } 
 	  reader << summary;
 	  return in;
