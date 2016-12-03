@@ -1,14 +1,25 @@
 #include "stdafx.h"
 #include "s_expression.h"
-#include <list>
+//#include <list>
 
 namespace lispic {
 
      class List{
-	  std::list<Symbol, S_expression> data;
+	  Symbol* first;
+	  List* rest;
+	  class iterator 
+	  {
+	       iterator& operator++(int);
+	       iterator& operator++();
+	  };
      public:
-	  S_expression& car();
+	  List(Reader reader, string string);
+	  List(List*);
+	  
+	  Symbol& car();
 	  List& cdr();
 	  
+	  iterator begin();
+	  iterator end();
      };
 }

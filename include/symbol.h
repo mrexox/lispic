@@ -4,19 +4,19 @@
 
 namespace lispic {
      class Symbol {
-	  Type type;
-	  Atom value;
-	  List list;
-	  Function function;
+	  symbol_type type;
+	  string name;
+	  Atom* atom;
+	  Function* function;
      public:
-	  Symbol(Atom a) : value(a), type(a.get_type()) {}
-	  Symbol(Function f) : function(f), type(FUNCTION) {}
-	  Symbol(Type t) { type = t; }
-	  Symbol& operator = (Type t) {
-	       type = t;
-	  }
-	  Symbol& operator = (Atom a) {
-	       value = a;
-	  }
+	  Symbol(Atom* a) : value(a), type(a.get_type()) {}
+	  Symbol(Function* f) : function(f), type(FUNCTION) {}
+	  Symbol(List* l) : lsit(l), type(LIST) {}
+	  ~Symbol();		//  delete if atom
+
+	  symbol_type get_type() { return type; }
+	  Atom* atom_value() { return atom; }
+	  Atom* symbol_value() { return SENVS.find(name); }
+	  Function* function_value() { return function; }
      };
 }

@@ -42,3 +42,8 @@ Before calling a function the 'call' sub fills the inner environment with passed
 
 ## Evaluating
 	
+## Data manipulating
+
+**Reader** - creates symbols and lists
+**S_expression** - manipulates symbols and lists
+**Environment** - deletes symbols and lists
