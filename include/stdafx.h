@@ -1,9 +1,16 @@
 #pragma once
 
-#include <stdio.h>
+#include <math.h>
+#include <string.h>
 #include <string>
 #include <iostream>
-#include <istream>
-#include <fstream>
+#include <list>
+#include <exception>
 
+#include "types.h"
 
+enum SUGAR : char {
+     LP = '(',
+	  RP = ')',
+	       
+};

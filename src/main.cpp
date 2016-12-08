@@ -1,11 +1,9 @@
-#include "stdafx.h"
-#include "read.h"
-#include "s_expression.h"
+#include "reader.h"
+#include "builtins.h"
+#include "environment.h"
 using namespace lispic;
 
-void loop(std::istream&);
-
-int main(int argc, char ** argv) {
+int main(int argc, char** argv) {
      // Usage: lispic filename.lisp 
      // or:    lispic
 
