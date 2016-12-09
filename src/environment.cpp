@@ -12,8 +12,10 @@ namespace lispic {
 
      number Environment::minus(numbers args)
      {     
-	  number res = 0;
-	  for(numbers::iterator p = args.begin(); p != args.end(); ++p) {
+
+	  numbers::iterator p = args.begin();
+	  number res = *p++;
+	  for(; p != args.end(); ++p) {
 	       res -= *p;
 	  }
 	  return res;
@@ -47,22 +49,21 @@ namespace lispic {
 	  return pow(*num, *(++num));
      }
 
-     number Environment::call(string name, numbers args) 
+     number Environment::call(std::string name, numbers& args) 
      {
 	  if (name == "+") {
-	       return plus(args);
+	       return Environment::plus(args);
 	  } else if (name == "-") {
-	       return minus(args); 
+	       return Environment::minus(args); 
 	  } else if (name == "*") {
-	       return product(args);
+	       return Environment::product(args);
 	  } else if (name == "/") {
-	       return divide(args); 
+	       return Environment::divide(args); 
 	  } else if (name == "^") {
-	       return power(args);
-	  } else {
-	       char * errstr = "Unknown function: ";
-	       strcat(errstr, name.c_str());
-	       throw unknown_function(errstr);
-	  }
-     }
+	       return Environment::power(args);
+	  } 
+	  std::string errstr = "Unknown function: ";
+	  errstr += name;
+	  throw unknown_function(errstr.c_str());
+	  } 
 }

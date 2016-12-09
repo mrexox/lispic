@@ -1,28 +1,23 @@
-#include "stdafx.h"
 #include "evaluator.h"
 #include "reader.h"
 
 namespace lispic {
-
-//     extern static Environment *ENV;
-     ENV = new Environment();
-
-     number eval (string str )
+     number eval (std::string str )
      {     
 	  reader::cut_blanks(str);	// needs reader!!!
 
-	  string func_name;
+	  std::string func_name;
 	  numbers args;
-	  list<string> tokens;
+	  std::list<std::string> tokens;
 	  switch (str[0]) 
 	  {
 	  case LP:
 	       func_name = reader::read_operation(str);
 	       tokens = reader::read_args(str);
-	       for(list<string>::const_iterator p = tokens.begin(); p != tokens.end(); ++p)
+	       for(std::list<std::string>::const_iterator p = tokens.begin(); p != tokens.end(); ++p)
 	       {
 	       
-		    args.push_back( eval(static_cast<string>(*p)) );
+		    args.push_back( eval(static_cast<std::string>(*p)) );
 	       }
 	       return call(func_name, args);
 	       break;
@@ -37,10 +32,9 @@ namespace lispic {
 	  return 0;
      }
 
-     number call(string func_name, numbers& args)
+     number call(std::string func_name, numbers& args)
      {
-
-	  return ENV->call(func_name, args);
+	  return ENV.call(func_name, args);
      }
 
 // HELP FUNCTIONS

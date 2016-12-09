@@ -1,40 +1,40 @@
 #pragma once
 #include "stdafx.h"
-using namespace std;
 
 namespace lispic
 {
      class Environment 
      {
-	  static number plus(numbers);
-	  static number minus(numbers);
-	  static number product(numbers);
-	  static number divide(numbers);
-	  static number power(numbers); // a ^ b
-     
-	  class bad_args : public exception
-	  {
-	       const char * message;
-	  public:
-	       bad_args(const char* msg) { message = msg; }
-	       virtual const char* what() const throw()
-		    {
-			 return message;
-		    }
-	  };
-
-	  class unknown_function : public exception
-	  {
-	       const char * message;
-	  public:
-	       unknown_function(const char* msg) { message = msg; }
-	       virtual const char* what() const throw()
-		    {
-			 return message;
-		    }
-
-	  };
+	  number plus(numbers);
+	  number minus(numbers);
+	  number product(numbers);
+	  number divide(numbers);
+	  number power(numbers); // a ^ b
      public:
-	  static number call(string, numbers);
+	  number call(std::string, numbers&);
+     };
+
+// STD::EXCEPTIONS
+     class bad_args : public std::exception
+     {
+	  const char * message;
+     public:
+	  bad_args(const char* msg) { message = msg; }
+	  virtual const char* what() const throw()
+	       {
+		    return message;
+	       }
+     };
+
+     class unknown_function : public std::exception
+     {
+	  const char * message;
+     public:
+	  unknown_function(const char* msg) { message = msg; }
+	  virtual const char* what() const throw()
+	       {
+		    return message;
+	       }
+
      };
 }

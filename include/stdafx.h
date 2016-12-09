@@ -8,9 +8,3 @@
 #include <exception>
 
 #include "types.h"
-
-enum SUGAR : char {
-     LP = '(',
-	  RP = ')',
-	       
-};

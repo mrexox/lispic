@@ -4,17 +4,18 @@
 
 namespace lispic
 {
-     static Environment *ENV;
+     extern Environment ENV;
+     
 
-     number eval (string str );
-     number call(string func_name, numbers& args);
+     number eval (std::string);
+     number call(std::string, numbers&);
 
      // HELP FUNCTIONS
      // in reader!!! namespace
      bool is_blank(const char ch);
 
-     // EXCEPTIONS
-     class empty_input : public exception
+     // STD::EXCEPTIONS
+     class empty_input : public std::exception
      {
 	  const char * message;
      public:
@@ -25,7 +26,7 @@ namespace lispic
 	       }
      };
 
-     class syntax_error : public exception
+     class syntax_error : public std::exception
      {
 	  const char * message;
      public:
