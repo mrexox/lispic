@@ -7,9 +7,10 @@ namespace lispic
      namespace reader
      {
 	  void cut_blanks(std::string&);	// needs reader!!!
-	  std::string read_operation(std::string&);
-	  std::list<std::string> read_args(std::string&);
-	  std::string read(std::string&); // must return double
+	  std::string read_token(std::string&); // must return double
+	  std::vector<std::string> read_tokens(std::string&); 
+	  std::string read_list(std::string&); // must return double
+	  bool is_token(const char);
 	  bool is_blank(const char ch);
 
 	  class input_error : public std::exception

@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <list>
+#include <vector>
 #include <exception>
 
 #include "types.h"

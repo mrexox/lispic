@@ -22,57 +22,61 @@ namespace lispic
 	       while (is_blank(str[blanks])) blanks++;
 	       str.erase(0, blanks);
 	  }
-	  std::string read_operation(std::string& str)
+
+	  std::vector<std::string> read_tokens(std::string& str)
 	  {
-	       if (str[0] != LP) throw input_error("Expected '('");
+	       std::vector<std::string> tokens;
+	       std::string token;
 	       str.erase(0, 1);
-
-	       return read(str);
-	  }
-	  std::list<std::string> read_args(std::string& str)
-	  {
-	       std::list<std::string> args;
-	       std::string check;
-	       while(str.length()) if( ( check = read(str) ) != "" ) args.push_back(check);
-	       return args;
-	  }
-
-	  std::string read(std::string& str)
-	  {
-	       int parenths = 0;
-	       std::string accumulator = "";
-	       bool in_list = false;
-	       bool reading_atom = false;
-	       cut_blanks(str);
-	       for (std::string::iterator p = str.begin(); p != str.end(); ++p)
+	       while (!(token = read_token(str)).empty())
 	       {
-		    if ( (is_blank(*p)  && !in_list)
-			 || (parenths <= 0 && in_list)) {
-			 str.erase(str.begin(), p);
-			 return accumulator;
-		    }
-		    switch(*p) {
-		    case LP: 
-			 if (reading_atom) {
-			      str.erase(str.begin(), p);
-			      return accumulator;
-			 }
-			 parenths++;
-			 in_list = true;
-			 accumulator += LP;
-			 break;
-		    case RP:
-			 parenths--;
-			 if (in_list) accumulator += RP;
-			 break;
-		    default:
-			 accumulator += *p;
-			 reading_atom = true;
-			 break;
-		    }
+		    tokens.push_back(token);
 	       }
-	       str.erase(str.begin(), str.end());
-	       return accumulator;
+	       return tokens;
+	  }
+	  std::string read_token(std::string& str)
+	  {
+	       cut_blanks(str);
+	       if (str.empty()) return str;
+	       if (str[0] == LP) {
+		    return read_list(str);
+	       } 
+	       else {
+		    std::string acc = "";
+		    int i = 0;
+		    while (is_token(str[i]) && str[i] != LP && i < str.length()) i++;
+		    acc = str.substr(0, i);
+		    str.erase(0, i);
+		    return acc;
+	       }
+	  }
+
+	  std::string read_list(std::string& str)
+	  {	       
+	       // first arg must be left parenthesis
+	       if (str[0] != LP) throw input_error("Expected '('");
+	       // can be optimized
+	       int parenthes = 0;
+	       int i = 0;
+	       do {
+		    if (str[i] == LP) parenthes++;
+		    else if (str[i] == RP) parenthes--;
+		    i++;
+	       } while(parenthes && !str.empty());
+	       if (str.empty())
+	       {
+		    throw input_error("Expected ')'");
+	       }
+	       std::string acc = str.substr(0, i);
+	       str.erase(0, i);
+	       return acc;
+	  }
+
+	  bool is_token(const char ch) {
+	       if (is_blank(ch) || ch == LP || ch == RP) {
+		    return false;
+	       }
+	       return true;
 	  }
      }
 }

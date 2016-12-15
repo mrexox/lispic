@@ -8,13 +8,14 @@ namespace lispic {
 
 	  std::string func_name;
 	  numbers args;
-	  std::list<std::string> tokens;
+	  std::vector<std::string> tokens;
 	  switch (str[0]) 
 	  {
 	  case LP:
-	       func_name = reader::read_operation(str);
-	       tokens = reader::read_args(str);
-	       for(std::list<std::string>::const_iterator p = tokens.begin(); p != tokens.end(); ++p)
+	       tokens = reader::read_tokens(str); // implement using read_token and read_list;
+	       func_name = tokens.at(0);
+	       tokens.erase(tokens.begin());
+	       for(std::vector<std::string>::const_iterator p = tokens.begin(); p != tokens.end(); ++p)
 	       {
 	       
 		    args.push_back( eval(static_cast<std::string>(*p)) );
@@ -25,7 +26,7 @@ namespace lispic {
 	       throw syntax_error("Unexpected ')'");
 	       break;
 	  default:
-	       return std::stod( reader::read(str) ); // must return double
+	       return std::stod( reader::read_token(str) ); // must return double
 	       break;
 	  }
 	  // can't reach here!
