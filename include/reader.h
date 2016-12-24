@@ -1,27 +1,36 @@
 #pragma once
 #include "stdafx.h"
 #include "types.h"
+#include "tokens.h"
 
 namespace lispic 
 {
-     namespace reader
+     class Reader
      {
-	  void cut_blanks(std::string&);	// needs reader!!!
-	  std::string read_token(std::string&); // must return double
-	  std::vector<std::string> read_tokens(std::string&); 
-	  std::string read_list(std::string&); // must return double
-	  bool is_token(const char);
-	  bool is_blank(const char ch);
+     public:
+	  static Reader& Get()
+	       {
+		    static Reader r;
+		    return r;
+	       }
+	  Tokens read_tokens(std::string& str);
+	  bool finished();
+     private:
+	  Reader() {}
+	  ~Reader() {}
 
-	  class input_error : public std::exception
+	  Reader(const Reader&);
+	  Reader& operator= (const Reader&);
+	  
+	  class syntax_error : public std::exception
 	  {
 	       const char * message;
 	  public:
-	       input_error(const char* msg) { message = msg; }
+	       syntax_error(const char* msg) { message = msg; }
 	       virtual const char* what() const throw()
 		    {
 			 return message;
 		    }
 	  };
-     }     
+     };
 }

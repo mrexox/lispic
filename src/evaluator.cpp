@@ -3,24 +3,25 @@
 
 namespace lispic {
      number eval (std::string str )
-     {     
-	  reader::cut_blanks(str);	// needs reader!!!
-
+     {
+	  Reader r = Reader::Get();
+	  	  
 	  std::string func_name;
-	  numbers args;
-	  std::vector<std::string> tokens;
+	  numbers arguments;
+	  Tokens tokens;
+	  Args args;
 	  switch (str[0]) 
 	  {
 	  case LP:
-	       tokens = reader::read_tokens(str); // implement using read_token and read_list;
-	       func_name = tokens.at(0);
-	       tokens.erase(tokens.begin());
-	       for(std::vector<std::string>::const_iterator p = tokens.begin(); p != tokens.end(); ++p)
+	       tokens = r.read_tokens(str); // implement using read_token and read_list;
+	       func_name = tokens.function();
+	       args = tokens.args();
+	       for(Args::const_iterator p = args.begin(); p != args.end(); ++p)
 	       {
 	       
-		    args.push_back( eval(static_cast<std::string>(*p)) );
+		    arguments.push_back( eval(static_cast<std::string>(*p)) );
 	       }
-	       return call(func_name, args);
+	       return call(func_name, arguments);
 	       break;
 	  case RP:
 	       throw syntax_error("Unexpected ')'");
