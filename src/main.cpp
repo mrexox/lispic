@@ -27,10 +27,9 @@ void execute(std::istream in)
      Reader r = Reader::Get();
      Evaluator e = Evaluator::Get();
      try {
-	  while ( !r.finished() )
+	  while ( !r.finished(in) )
 	  {
-	       Symbols syms = r.read(in);
-	       Symbol sym = e.eval(syms);
+	       Symbol sym = e.eval(r.read(in));
 	       std::cout << sym;
 	  }
      } catch (std::exception ex) {

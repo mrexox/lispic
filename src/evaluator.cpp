@@ -1,44 +1,83 @@
 #include "evaluator.h"
-#include "reader.h"
+
 
 namespace lispic {
-     number eval (std::string str )
+     Symbol Evaluator::eval(Symbols& elements)
      {
-	  Reader r = Reader::Get();
-	  	  
-	  std::string func_name;
-	  numbers arguments;
-	  Tokens tokens;
-	  Args args;
-	  switch (str[0]) 
+	  eval_list(elements);
+	  // if has just one symbol inside -> return it
+	  // if has a list with something, try to call something
+	  // NOTE: calling of () returns NIL, which is 0, "" and empty list
+     }
+     void eval_list(Symbols& elements) {
+	  for (Symbols::iterator p = elements.begin();
+	       p < elementd.end();
+	       ++p)
 	  {
-	  case LP:
-	       tokens = r.read_tokens(str); // implement using read_token and read_list;
-	       func_name = tokens.function();
-	       args = tokens.args();
-	       for(Args::const_iterator p = args.begin(); p != args.end(); ++p)
-	       {
-	       
-		    arguments.push_back( eval(static_cast<std::string>(*p)) );
+	       if (p->type() == LIST) {
+		    
+		    eval_list( p->list() );
+		    
+	       } else if (p->type() == ATOM) {
+		    
+		    if (like_num(*p) || like_str(*p)) {
+			 eval_symbol(*p);
+		    } else {
+			 send_to_env(*p);
+		    }
+	       } else {
+		    // FIXME
+		    // symbol was already initialized
+		    // seems impossible
 	       }
-	       return call(func_name, arguments);
-	       break;
-	  case RP:
-	       throw syntax_error("Unexpected ')'");
-	       break;
-	  default:
-	       return std::stod( reader::read_token(str) ); // must return double
-	       break;
+	       
 	  }
-	  // can't reach here!
-	  return 0;
      }
-
-     number call(std::string func_name, numbers& args)
+     
+     bool like_num(Symbol& s)
      {
-	  return ENV.call(func_name, args);
+	  for(int i = 0; i < s.name().length(); ++i)
+	  {
+	       if ( !( isdigit(s.name()[i] || s.name()[i] == '.' ) ))
+		    return false;
+	  }
+	  return true;
      }
 
-// HELP FUNCTIONS
-// in Reader!!!
+     bool like_str(Symbol& s)
+     {
+	  if (s.name()[0] == '\"' && s.name()[s.name().length() - 1] == '\"')
+	       return true;
+	  return false;
+     }
+     
+     void eval_symbol(Symbol& symbol)
+     {
+	  if ( like_str(symbol) )
+	  {
+	       std::string value = symbol.name();
+	       value.pop_back();
+	       value.erase(0, 1);
+	       symbol.init(value);
+	  } else {
+	       try {
+		    number n = std::stod(symbol.name());
+		    symbol.init(n);
+	       } catch (std::invalid_argument ia) {
+		    throw eval_error(symbol.name()
+				     + " is not a number but supposed to be so");
+	       } catch (std::out_of_range oor) {
+		    throw eval_error("Cannot convert to double: " + symbol.name());
+	       }
+	  }
+     }
+
+     void send_to_env(Symbol& symbol)
+     {
+	  Environment env = Environment::Get();
+	  if ( !env.fulfill(symbol) )
+	  {
+	       throw eval_error("Symbol `" + symbol.name() + "` is unknown");
+	  }
+     }
 }

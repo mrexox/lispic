@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
-#include "types.h"
-#include "tokens.h"
+#include "symbol.h"
+
 
 namespace lispic 
 {
@@ -9,12 +9,12 @@ namespace lispic
      {
      public:
 	  static Reader& Get()
-	       {
-		    static Reader r;
-		    return r;
-	       }
-	  Tokens read_tokens(std::string& str);
-	  bool finished();
+	  {
+	       static Reader r;
+	       return r;
+	  }
+	  bool finished(std::istream in);
+	  Symbols read(std::istream in);
      private:
 	  Reader() {}
 	  ~Reader() {}

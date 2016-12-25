@@ -7,6 +7,7 @@
 
 // Evaluator needs
 #include <math.h>
+#include <ctype.h>
 
 // Reader needs
 #include <string>
@@ -16,6 +17,7 @@
 
 
 #include <exception>
+#include <stdexcept>
 
 #include "types.h"
 

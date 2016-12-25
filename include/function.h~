@@ -1,0 +1,14 @@
+#pragma once
+#include "stdafx.h"
+#incude "environment.h"
+
+namespace lispic
+{
+     class Function
+     {
+	  Environment local_env;
+     public:
+	  Fuction(List, Symbols);
+	  call(List);
+     };
+}
