@@ -26,5 +26,11 @@ namespace lispic
 			 return message;
 		    }
 	  };
+     private:
+	  void eval_list(Symbols&);
+	  bool like_num(Symbol&);
+	  bool like_str(Symbol&);
+	  void eval_symbol(Symbol&);
+	  void send_to_env(Symbol&);
      };
 }

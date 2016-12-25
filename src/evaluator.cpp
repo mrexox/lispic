@@ -9,7 +9,9 @@ namespace lispic {
 	  // if has a list with something, try to call something
 	  // NOTE: calling of () returns NIL, which is 0, "" and empty list
      }
-     void eval_list(Symbols& elements) {
+     
+     void Evaluator::eval_list(Symbols& elements)
+     {
 	  for (Symbols::iterator p = elements.begin();
 	       p < elementd.end();
 	       ++p)
@@ -34,7 +36,7 @@ namespace lispic {
 	  }
      }
      
-     bool like_num(Symbol& s)
+     bool Evaluator::like_num(Symbol& s)
      {
 	  for(int i = 0; i < s.name().length(); ++i)
 	  {
@@ -44,14 +46,14 @@ namespace lispic {
 	  return true;
      }
 
-     bool like_str(Symbol& s)
+     bool Evaluator::like_str(Symbol& s)
      {
 	  if (s.name()[0] == '\"' && s.name()[s.name().length() - 1] == '\"')
 	       return true;
 	  return false;
      }
      
-     void eval_symbol(Symbol& symbol)
+     void Evaluator::eval_symbol(Symbol& symbol)
      {
 	  if ( like_str(symbol) )
 	  {
@@ -72,7 +74,7 @@ namespace lispic {
 	  }
      }
 
-     void send_to_env(Symbol& symbol)
+     void Evaluator::send_to_env(Symbol& symbol)
      {
 	  Environment env = Environment::Get();
 	  if ( !env.fulfill(symbol) )
