@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "reader.h"
 #include "evaluator.h"
+
+
 using namespace lispic;
 
 void interactive(void);
@@ -32,7 +34,7 @@ void execute(std::istream in)
 	       Symbol sym = e.eval(r.read(in));
 	       std::cout << sym;
 	  }
-     } catch (std::exception ex) {
+     } catch (const std::exception& ex) {
 	       std::err << "Exception -> " << ex.what() << std::endl;
      }
 }

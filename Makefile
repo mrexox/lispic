@@ -1,30 +1,36 @@
 CC = g++
 OUT = lispic
-CFLAGS = -Wall -g -std=c++11
 INCLUDE = ./include
+CFLAGS = -Wall -g -std=c++11 -I$(INCLUDE)
 SRC = ./src
 OBJ = ./obj
 
-lispic: reader.o $(SRC)/main.cpp 
-	$(CC) $(CFLAGS) $(OBJ)/read.o $(SRC)/main.cpp  -o $(OUT) -I$(INCLUDE)
+lispic: main.o
 
-reader_test: reader.o reader_test.cpp
-	$(CC) $(CFLAGS) $(OBJ)/reader.o -o reader_test -I$(INCLUDE) reader_test.cpp
+main.o: evaluator.o reader.o $(SRC)/main.cpp 
+	$(CC) $(CFLAGS)  -o $(OBJ)/main.o -c $(SRC)/main.cpp 
 
-eval_test: reader.o tokens.o evaluator.o $(SRC)/eval_test.cpp 
-	$(CC) $(CFLAGS) $(OBJ)/tokens.o $(OBJ)/environment.o $(OBJ)/reader.o $(OBJ)/evaluator.o -o eval_test -I$(INCLUDE) $(SRC)/eval_test.cpp
 
-evaluator.o: environment.o $(SRC)/evaluator.cpp $(INCLUDE)/evaluator.h $(INCLUDE)/stdafx.h
-	$(CC) $(CFLAGS) -o $(OBJ)/evaluator.o  -c $(SRC)/evaluator.cpp  -I$(INCLUDE)
+evaluator.o: symbol.o environments.o $(SRC)/evaluator.cpp $(INCLUDE)/evaluator.h $(INCLUDE)/stdafx.h
+	$(CC) $(CFLAGS) -o $(OBJ)/evaluator.o  -c $(SRC)/evaluator.cpp 
 
-environment.o: $(INCLUDE)/environment.h $(SRC)/environment.cpp $(INCLUDE)/stdafx.h 
-	$(CC) $(CFLAGS) -o $(OBJ)/environment.o -c $(SRC)/environment.cpp -I$(INCLUDE)
+environments.o: symbol.o environment.o builtin.o user_function.o $(SRC)/environments.cpp $(INCLUDE)/environments.h
+	$(CC) $(CFLAGS) -o $(OBJ)/environments.o -c $(SRC)/environments.cpp
 
-reader.o: $(SRC)/reader.cpp $(INCLUDE)/reader.h $(INCLUDE)/stdafx.h
-	$(CC) $(CFLAGS) -o $(OBJ)/reader.o -c $(SRC)/reader.cpp -I$(INCLUDE)
+builtin.o: $(SRC)/biltin.cpp $(INCLUDE)/builtin.h $(INCLUDE)/function.h
+	$(CC) $(CFLAGS) -o $(OBJ)/builtin.o -c $(SRC)/builtin.cpp
 
-tokens.o: $(INCLUDE)/tokens.h $(SRC)/tokens.cpp $(INCLUDE)/stdafx.h
-	$(CC) $(CFLAGS) -o $(OBJ)/tokens.o -c $(SRC)/tokens.cpp -I$(INCLUDE)
+user_function.o:  $(SRC)/user_function.cpp $(INCLUDE)/user_function.h $(INCLUDE)/function.h
+	$(CC) $(CFLAGS) -o $(OBJ)/user_function.o -c $(SRC)/user_function.cpp
+
+environment.o: symbol.o $(INCLUDE)/environment.h
+	$(CC) $(CFLAGS) -o $(OBJ)/environment.o -c $(INCLUDE)/environment.h
+
+reader.o: symbol.o $(SRC)/reader.cpp $(INCLUDE)/reader.h $(INCLUDE)/stdafx.h
+	$(CC) $(CFLAGS) -o $(OBJ)/reader.o -c $(SRC)/reader.cpp
+
+symbol.o: $(INCLUDE)/symbol.h
+	$(CC) $(CFLAGS) -o $(OBJ)/symbol.o -c $(SRC)/symbol.cpp 
 
 clear:
 	find . -name *~ -exec rm '{}' +

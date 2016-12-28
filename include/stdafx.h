@@ -11,6 +11,7 @@
 
 // Reader needs
 #include <string>
+#include <locale>
 
 // Symbol needs
 #include <vector>
@@ -21,4 +22,4 @@
 
 #include "types.h"
 
-
+#define STRICT

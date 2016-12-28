@@ -9,6 +9,7 @@ namespace lispic
 	  FUNCTION,
 	  ATOM,
 	  LIST,
+	  NIL,
      };
      class Symbol 
      {
@@ -19,8 +20,24 @@ namespace lispic
 	  Symbols _list;
 	  Type _type;
      public:
+	  Symbol() { _type = NIL; }
 	  Symbol(std::string name) : name(name) {}
 	  std::string name() { return _name; }
+	  Symbol& init(Symbol& sym)
+	  {
+	       switch (sym.type())
+	       {
+	       case NUMBER: _number = sym.number(); break;
+	       case STRING: _string = sym.string(); break;
+	       case FUNCTION: _function = sym.function(); break;
+	       case LIST: _list = sym.list(); break;
+	       default:
+		    _type = NIL;
+		    break;
+	       }
+	       return *this;
+	  }
+	  
 	  Symbol& init(number an)
 	  {
 	       n = an;
@@ -48,12 +65,20 @@ namespace lispic
 	       _type = LIST;
 	       return *this;
 	  }
+
+	  Symbol& init()
+	       {
+		    _type = NIL;
+		    _number = 0;
+		    _string = "";
+		    return *this;
+	       }
 	  Type type() { return _type; }
 	  // suppose to fill symbols with values
-	  number& number();
-	  std::string& string();
-	  Function& function();
-	  Symbols& list();
+	  number number() const;
+	  std::string string() const;
+	  Function function() const;
+	  Symbols list() const;
 
 	  friend std::ostream operator << (const Symbol&);
      };

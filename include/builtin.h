@@ -5,11 +5,15 @@
 
 namespace lispic
 {
+     typedef Symbol (*buitin)(Symbols&);
+     
      class Builtin : public virtual Function
      {
+	  builtin function;	  
 	  std::string name;
      public:
-	  Builtin(Symbols);
-	  Symbol call(Symbols);
+	  Builtin(builtin function)
+	       : function(function) {}
+	  Symbol call(Symbols&);
      };
 }

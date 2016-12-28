@@ -7,14 +7,16 @@ namespace lispic
 {
      class Reader
      {
+	  bool reading_finished;
      public:
 	  static Reader& Get()
 	  {
 	       static Reader r;
 	       return r;
 	  }
-	  bool finished(std::istream in);
+	  bool finished(std::istream in) const;
 	  Symbols read(std::istream in);
+	  
      private:
 	  Reader() {}
 	  ~Reader() {}
@@ -28,9 +30,9 @@ namespace lispic
 	  public:
 	       syntax_error(const char* msg) { message = msg; }
 	       virtual const char* what() const throw()
-		    {
-			 return message;
-		    }
+	       {
+		    return message;
+	       }
 	  };
      };
 }

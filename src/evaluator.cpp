@@ -1,6 +1,5 @@
 #include "evaluator.h"
 
-
 namespace lispic {
      Symbol Evaluator::eval(Symbols& elements)
      {
@@ -65,10 +64,10 @@ namespace lispic {
 	       try {
 		    number n = std::stod(symbol.name());
 		    symbol.init(n);
-	       } catch (std::invalid_argument ia) {
+	       } catch (const std::invalid_argument& ia) {
 		    throw eval_error(symbol.name()
 				     + " is not a number but supposed to be so");
-	       } catch (std::out_of_range oor) {
+	       } catch (const std::out_of_range& oor) {
 		    throw eval_error("Cannot convert to double: " + symbol.name());
 	       }
 	  }
@@ -76,8 +75,8 @@ namespace lispic {
 
      void Evaluator::send_to_env(Symbol& symbol)
      {
-	  Environment env = Environment::Get();
-	  if ( !env.fulfill(symbol) )
+	  Environments envs = Environments::Get();
+	  if ( !envs.fulfill(symbol) )
 	  {
 	       throw eval_error("Symbol `" + symbol.name() + "` is unknown");
 	  }

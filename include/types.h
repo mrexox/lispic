@@ -12,7 +12,7 @@ namespace lispic
      enum SUGAR : char {
 	  LP = '(',
 	       RP = ')',
-	       
+	       QQ = '\"',
 	       };
 
 }

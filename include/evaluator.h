@@ -1,3 +1,8 @@
+/*
+  Evaluator fills symbols with values they must have
+  Then it puts these values if they are atomic or calls function if a list found
+ */
+
 #pragma once
 #include "stdafx.h"
 #include "symbol.h"
@@ -27,6 +32,8 @@ namespace lispic
 		    }
 	  };
      private:
+	  Evaluator() {}
+	  Evaluator(Evaluator&) {}
 	  void eval_list(Symbols&);
 	  bool like_num(Symbol&);
 	  bool like_str(Symbol&);
