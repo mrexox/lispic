@@ -38,7 +38,7 @@ namespace lispic
 
      Symbol sum(Symbols& symbols)
      {
-	  number res = 0;
+	  Number res = 0;
 	  for (Symbols::const_iterator p = symbols.begin();
 	       p != symbols.end();
 	       ++p)

@@ -16,6 +16,8 @@
 // Symbol needs
 #include <vector>
 
+// Environment needs
+#include <map>
 
 #include <exception>
 #include <stdexcept>

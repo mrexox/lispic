@@ -1,87 +1,37 @@
 #pragma once
 #include "stdafx.h"
+#include "value.h"
 
 namespace lispic
 {
-     enum Type {
-	  NUMBER,
-	  STRING,
-	  FUNCTION,
-	  ATOM,
-	  LIST,
-	  NIL,
-     };
+
      class Symbol 
      {
 	  std::string _name;
-	  number _number;
-	  std::string _string;
-	  Function _function;
-	  Symbols _list;
-	  Type _type;
+	  Value _value;
      public:
-	  Symbol() { _type = NIL; }
-	  Symbol(std::string name) : name(name) {}
-	  std::string name() { return _name; }
-	  Symbol& init(Symbol& sym)
-	  {
-	       switch (sym.type())
-	       {
-	       case NUMBER: _number = sym.number(); break;
-	       case STRING: _string = sym.string(); break;
-	       case FUNCTION: _function = sym.function(); break;
-	       case LIST: _list = sym.list(); break;
-	       default:
-		    _type = NIL;
-		    break;
-	       }
-	       return *this;
-	  }
-	  
-	  Symbol& init(number an)
-	  {
-	       n = an;
-	       _type = NUMBER;
-	       return *this;
-	  }
-	  
-	  Symbol& init(std::string as)
-	  {
-	       s = as;
-	       _type = STRING;
-	       return *this;
-	  }
-	  
-	  Symbol& init(Function af)
-	  {
-	       f = af;
-	       _type = FUNCTION;
-	       return *this;
-	  }
-	  
-	  Symbol& init(Symbols ss)
-	  {
-	       syms = ss;
-	       _type = LIST;
-	       return *this;
-	  }
+	  Symbol() : _value() {}
+	  Symbol(std::string name) : _name(name) {}
+	  Symbol(Symbols symbols) : _value(symbols) {}
 
-	  Symbol& init()
+	  std::string name() const { return _name; }
+	  Type type() const { return _value.type(); }
+	  Value value() const { return _value; }
+	  Symbols list() {return _value.list();}
+
+	  friend std::ostream& operator << (std::ostream&, const Symbol&);
+	  
+	  Symbol& operator = (const Value& value)
 	       {
-		    _type = NIL;
-		    _number = 0;
-		    _string = "";
+		    _value = value;
 		    return *this;
 	       }
-	  Type type() { return _type; }
-	  // suppose to fill symbols with values
-	  number number() const;
-	  std::string string() const;
-	  Function function() const;
-	  Symbols list() const;
-
-	  friend std::ostream operator << (const Symbol&);
+	  Symbol& operator = (const Symbol& symbol)
+	       {
+		    _value = symbol.value();
+		    return *this;
+	       }
      };
-     std::ostream operator << (const Symbol&);
-     typedef std::vector<Symbol> Symbols;     
+     std::ostream& operator << (std::ostream&, const Symbol&);
+
 }

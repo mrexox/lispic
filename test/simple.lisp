@@ -1,5 +1,0 @@
-(+ 1 2 3 4 5)
-(- 12 ( * 4 3) 1)
-(concat "concat" " " "me!")
-(print "Hello, world!")
-(println "Hello, world!")

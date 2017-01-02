@@ -62,7 +62,7 @@ namespace lispic {
 	       symbol.init(value);
 	  } else {
 	       try {
-		    number n = std::stod(symbol.name());
+		    Number n = std::stod(symbol.name());
 		    symbol.init(n);
 	       } catch (const std::invalid_argument& ia) {
 		    throw eval_error(symbol.name()

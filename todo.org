@@ -1,10 +1,20 @@
 Mon Dec 26 19:44:48 2016:
+
 * TODO Написать класс Reader
-** TODO Написать метод read_list
-** TODO Дописать метод read
+** DONE Написать метод read_list
+** DONE Дописать метод read
+** TODO Добавить обработку комментариев
+** TODO Протестировать
+   
+
+* TODO Написать абстрактный класс Function в хорошем стиле
+** TODO Написать класс UserFunction, BuiltinFunction
+*** TODO Для каждой оформить метод call
+   
+    
 * TODO Дописать функции в Environments
-* TODO Написать класс UserFunction, BuiltinFunction
-** TODO Для каждой оформить метод call
+  
 * TODO Дописать eval в Evaluator
+  
 * TODO Протестировать и откомпилировать
    
