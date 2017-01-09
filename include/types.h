@@ -20,14 +20,10 @@ namespace lispic
 	       SPACE = ' ',
 	       COMMENT = ';',
 	       };
-     class lispic_error : public std::exception
+     class lispic_error : public std::logic_error
      {
-	  const char * message;
      public:
-	  lispic_error(const std::string msg) { message = msg.c_str(); }
-	  virtual const char* what() const throw()
-	       {
-		    return message;
-	       }
+	  lispic_error(const std::string msg) : logic_error(msg) { }
+
      };	
 }

@@ -17,7 +17,7 @@ namespace lispic
      class not_found_error : public lispic_error
      {
      public:
-	  not_found_error(std::string msg)
+	  not_found_error(const std::string msg)
 	       : lispic_error(msg) {}
      };
 

@@ -2,18 +2,18 @@
 
 namespace lispic
 {
-     std::ostream& operator << (std::ostream& out, const Symbol& value)
+     std::ostream& operator << (std::ostream& out, const Symbol& symbol)
      {
-	  switch(value.type())
+	  switch(symbol.type())
 	  {
 	  case NUMBER:
-	       out << value._value.number();
+	       out << symbol._value.number();
 	       break;
 	  case STRING:
-	       out << value._value.string();
+	       out << '\"' << symbol._value.string() << '\"';
 	       break;
 	  case FUNCTION:
-	       out << "#<Function>";
+	       out << "#<Function " + symbol.name() + ">";
 	       break;
 	  case LIST:
 	       break;

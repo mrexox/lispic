@@ -52,7 +52,6 @@ namespace lispic
 	  std::string _name;
 	  Value _value;
      public:
-	  
 	  Symbol() : _value() { _name = "nil"; }
 	  Symbol(std::string name) : _name(name) {}
 	  Symbol(Symbols symbols) : _value(symbols) {}
@@ -70,11 +69,12 @@ namespace lispic
 	  friend std::ostream& operator << (std::ostream&, const Symbol&);
 	  friend std::ostream& operator << (std::ostream&, Symbols&);
 	  
-	  Symbol& operator = (const Symbol& symbol)
-	       {
-		    _value = symbol._value;
-		    return *this;
-	       }
+	  // Symbol& operator = (const Symbol& symbol)
+	  //      {
+	  // 	    _name = symbol._name;
+	  // 	    _value = symbol._value;
+	  // 	    return *this;
+	  //      }
      };
      std::ostream& operator << (std::ostream& out, const Symbol& s);
      std::ostream& operator << (std::ostream&, Symbols&);

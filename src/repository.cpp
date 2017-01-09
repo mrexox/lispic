@@ -54,8 +54,7 @@ namespace lispic
 	  {
 	       if (p->has(name)) return true;
 	  }
-	  return true;
-
+	  return builtins.has(name);
      }
      
      bool Repository::has_special(std::string name)

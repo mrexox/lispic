@@ -45,7 +45,7 @@ namespace lispic {
 	  {
 	       if (p->value().type() == LIST) {
 		    
-		    fulfilled.push_back( eval( p->value().list() ));
+		    fulfilled.push_back( do_this_list( p->value().list() ));
 		    
 	       } else {		    
 		    fulfilled.push_back( eval_symbol(*p) );
@@ -110,8 +110,8 @@ namespace lispic {
 	  Repository& repository = Repository::Get();
 	  if ( !repository.has(name) )
 	  {
-	       std::string msg = "Symbol `" + name + "` is unknown"; 
-	       throw eval_error(msg);
+	       
+	       throw eval_error("Symbol `" + name + "` is unknown");
 	  }
 	  return Symbol(name, repository.get(name));
      }
@@ -119,18 +119,11 @@ namespace lispic {
      Symbol Evaluator::make_function_call(Symbols& list)
      {
 	  // The first symbol is supposed to be a function
-	  Symbol result;
-	  try {
-	       // ПОЛИМОРФИЗМ
-	       Function* pf = list.front().value().pfunction();
-	       Symbols args;
-	       args.assign(list.begin()+1, list.end());
-	       result = pf->call(args);
-	  } catch (/*???*/...) {
-	       std::string name = list.front().name();
-	       throw eval_error(name + " is not a builtin or user-defined function");
-	  }
-	  return result;
+	  // ПОЛИМОРФИЗМ
+	  Function* pf = list.front().value().pfunction();
+	  Symbols args;
+	  args.assign(list.begin()+1, list.end());
+	  return pf->call(args);
      }
 
      bool Evaluator::is_special(std::string name)
