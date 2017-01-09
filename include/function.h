@@ -6,17 +6,18 @@
 
 #pragma once
 #include "stdafx.h"
+#include "symbol.h"
 #include "environment.h"
 
 namespace lispic
 {
+     class Symbol;
+     typedef std::vector<Symbol> Symbols;
+     
      class Function
      {
-	  /* protected:
-	  Environment local_env;
      public:
-	  Fuction(Symbols);
-	  virtual Symbol call(Symbols);
-	  */
+	  virtual Symbol call(Symbols& args) = 0;
+	  virtual ~Function() {}
      };
 }

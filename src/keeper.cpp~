@@ -1,9 +1,9 @@
-#include "environments.h"
+#include "keeper.h"
 
 namespace lispic
 {
      
-     Environments::Environments()
+     Keeper::Keeper()
      {
 	  builtins["+"] = builtins["sum"] = sum;
 	  builtins["def"] = def;
@@ -13,7 +13,7 @@ namespace lispic
 	  builtins["concat"] = concat;
      }
 
-     bool Environments::fulfill(Symbol& sym)
+     bool Keeper::fulfill(Symbol& sym)
      {
 	  if (!builtins.fulfill(sym))
 	       if (!user_defined.fulfull(sym))
@@ -22,7 +22,7 @@ namespace lispic
 	  return true;
      }
 
-     void Environments::set(std::string name, Symbol symbol)
+     void Keeper::set(std::string name, Symbol symbol)
      {
 	  switch (symbol.type()) {
 	  case NUMBER:

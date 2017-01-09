@@ -1,0 +1,30 @@
+#pragma once
+#include "stdafx.h"
+#include "symbol.h"
+#include "function.h"
+
+namespace lispic
+{
+     typedef Symbol (*builtin)(Symbols&);
+     
+     class BuiltinFunction : public virtual Function
+     {
+	  builtin function;
+	  std::string name;
+     public:
+	  BuiltinFunction(builtin function)
+	       : function(function) {}
+	  Symbol call(Symbols& args)
+	  {
+	       return function(args);
+	  }
+     };
+
+          
+     Symbol sum(Symbols&);
+     Symbol print(Symbols&);
+     Symbol concat(Symbols&);
+     Symbol def(Symbols&);
+     Symbol set(Symbols&);
+     Symbol lambda(Symbols&);
+}

@@ -2,7 +2,7 @@
   Reads the input
   when from console: line by line
   when from file: wraps all lines in list and returns it
- */
+*/
 #pragma once
 #include "stdafx.h"
 #include "symbol.h"
@@ -17,10 +17,10 @@ namespace lispic
 	  bool reading_finished;
      public:
 	  static Reader& Get()
-	  {
-	       static Reader r;
-	       return r;
-	  }
+	       {
+		    static Reader r;
+		    return r;
+	       }
 	  bool finished(std::istream&);
 	  Symbols read(std::istream&, int);
 	  
@@ -38,27 +38,15 @@ namespace lispic
 	  bool is_blank(const char& ch) const;
 	  bool is_space(const char& ch) const;
 
-	  
-	  class syntax_error : public std::exception
-	  {
-	       const char * message;
-	  public:
-	       syntax_error(const char* msg) { message = msg; }
-	       virtual const char* what() const throw()
-	       {
-		    return message;
-	       }
-	  };
 
-	  class read_error : public std::exception
-	  {
-	       const char * message;
-	  public:
-	       read_error(const char* msg) { message = msg; }
-	       virtual const char* what() const throw()
-	       {
-		    return message;
-	       }
-	  };
+     };
+
+     class syntax_error : public lispic_error {
+     public:
+	  syntax_error(const std::string msg) : lispic_error(msg) {}
+     };
+     class read_error : public lispic_error {
+     public:
+	  read_error(const std::string msg) : lispic_error(msg) {}
      };
 }

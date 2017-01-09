@@ -1,37 +1,53 @@
 #pragma once
 #include "stdafx.h"
-#include "symbol.h"
 
 namespace lispic
 {
-     class Symbol;
-     
-     template<typename Key, typename Value>
-     class Environment
-     {
-	  std::map<Key, Value> env;
+     template<class K, class V>
+     class Environment : public std::map<K, V>
+     {	  
+	  
      public:
-	  bool fulfill(Symbol&);
-	  void set(Key&, Value&);
-     };     
+	  virtual V set(K&, V&);
+	  virtual V get(K&);
+	  virtual bool has(K&);
+//	  virtual void unset(K&);
+     };
 
-     /*
-     template<typename Key, typename Value>
-     Symbol Environment<Key, Value>::set(Key key, Value value)
+     class not_found_error : public lispic_error
      {
-	  env[key] = value;
+     public:
+	  not_found_error(std::string msg)
+	       : lispic_error(msg) {}
+     };
+
+     // -- Methods Realization-- //
+     template<class K, class V>
+     bool Environment<K, V>::has(K& key)
+     {
+	  typename std::map<K, V>::iterator i = this->find(key);
+	  if (i != this->end()) 
+	       return true;
+	  return false;
+     }
+     
+     template<class K, class V>
+     V Environment<K, V>::set(K& key, V& value)
+     {
+	  (*this)[key] = value;
+	  return value;
      }
 
-     template<typename Key, typename Value>
-     bool Environment< Key,  Value>::fulfill(Symbol& symbol)
+     template<typename K, typename V>
+     V Environment< K,  V>::get(K& key)
      {
-	  std::map<Key, Value>::iterator i = env.find(symbol.name());
-	  if (i != env.end()) {
-	       symbol.init(*i);
-	       return true;
+	  typename std::map<K, V>::iterator i = this->find(key);
+	  if (i != this->end()) {
+	       return i->second;
 	  } else {
-	       return false;
+	       std::stringstream ss;	// for better output
+	       ss << key;
+	       throw not_found_error("Environment doesn't have " + ss.str() ); // CHECK
 	  }
      }
-     */
 }

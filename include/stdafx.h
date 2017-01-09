@@ -19,6 +19,9 @@
 // Environment needs
 #include <map>
 
+// Repository needs
+#include <stack>
+
 #include <exception>
 #include <stdexcept>
 

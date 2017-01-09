@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 namespace lispic
 {
@@ -19,5 +20,14 @@ namespace lispic
 	       SPACE = ' ',
 	       COMMENT = ';',
 	       };
-
+     class lispic_error : public std::exception
+     {
+	  const char * message;
+     public:
+	  lispic_error(const std::string msg) { message = msg.c_str(); }
+	  virtual const char* what() const throw()
+	       {
+		    return message;
+	       }
+     };	
 }

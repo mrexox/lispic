@@ -1,0 +1,30 @@
+#include "symbol.h"
+
+namespace lispic
+{
+     std::ostream& operator << (std::ostream& out, Symbol::Value& value)
+     {
+	  switch(value._type)
+	  {
+	  case NUMBER:
+	       out << value._number;
+	       break;
+	  case STRING:
+	       out << value._string;
+	       break;
+	  case FUNCTION:
+	       out << "#<Function>";
+	       break;
+	  case LIST:
+	       break;
+	  case NIL:
+	       out << "nil";
+	       break;
+	  default:
+	       out << "!Error, not initialized symbol!";
+	       break;
+	  }
+	  return out;
+
+     }
+}
