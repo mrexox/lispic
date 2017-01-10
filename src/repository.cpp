@@ -26,6 +26,8 @@ namespace lispic
 	  specials["lambda"] = new SpecialFunction(lib::lambda);
 	  specials["if"] = new SpecialFunction(lib::if_statement);
 	  specials["have"] = new SpecialFunction(lib::have);
+	  specials["cycle"] = new SpecialFunction(lib::cycle);
+	  specials["undef"] = new SpecialFunction(lib::undef);
      }
 
      Repository::~Repository()

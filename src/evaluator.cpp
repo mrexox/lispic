@@ -121,11 +121,12 @@ namespace lispic {
 	  // The first symbol is supposed to be a function
 	  // ПОЛИМОРФИЗМ
 	  Function* pf = list.front().value().pfunction();
+	  if (pf == 0) throw call_error(list.front().name() + " is not a function!");
 	  Symbols args;
 	  args.assign(list.begin()+1, list.end());
 	  return pf->call(args);
      }
-
+     
      bool Evaluator::is_special(std::string name)
      {	  
 	  return Repository::Get().has_special(name);

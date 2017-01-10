@@ -4,7 +4,10 @@ namespace lispic
 {
      Symbol UserFunction::call(Symbols& args)
      {
-	  
+	  if (args.size() != signature.size())
+	       throw call_error("Wrong number of arguments, given: "
+				+ std::to_string(args.size())
+				+ ", needs: " + std::to_string(signature.size()));
 	  Repository::VariablesEnvironment venv;
 	  for(Symbols::iterator sig = signature.begin(),
 		    arg = args.begin();

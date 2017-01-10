@@ -7,10 +7,12 @@ namespace lispic
 	  // Specials
 	  Symbol set(Symbols&);
 	  Symbol def(Symbols&);
+	  Symbol undef(Symbols&);
 	  Symbol lambda(Symbols&);
 	  Symbol if_statement(Symbols&);
 	  Symbol have(Symbols&);
-     
+	  Symbol cycle(Symbols&);
+	  
 	  // Builtins
 	  Symbol sum(Symbols&);
 	  Symbol print(Symbols&);

@@ -69,6 +69,7 @@ namespace lispic
 	  Symbol(bool v) : _value(v) {if (v) _name = "t"; else _name = "nil";}
 	  Symbol(std::string name) : _name(name) {}
 	  Symbol(Symbols symbols) : _value(symbols) {}
+	  
 	  Symbol(std::string name, Value value) : _name(name), _value(value) {}
 	  
 	  std::string name() const { return _name; }
@@ -76,7 +77,7 @@ namespace lispic
 	  
 	  Value value() const  { return _value; }
 	  void set(Value v) { _value = v; }
-	  
+	  void set(std::string n, Value v) { _name = n; _value = v; }
 	  Symbols list() {return _value.list();}
 	  Symbol& fill(Value& v) { _value = v; return *this; }
 

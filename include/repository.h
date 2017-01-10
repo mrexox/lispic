@@ -52,6 +52,8 @@ namespace lispic
 	  friend Symbol lib::def(Symbols&);
 	  friend Symbol lib::lambda(Symbols&);
 	  friend Symbol lib::have(Symbols&);
+	  friend Symbol lib::cycle(Symbols&);
+	  friend Symbol lib::undef(Symbols&);
      };
 
 }

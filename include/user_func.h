@@ -21,10 +21,14 @@ namespace lispic
 	  user_function function;
 	  Symbols signature;
 	  Symbols body;
+	  
      public:
 	  UserFunction(Symbols& signature, Symbols& body)
 	       : signature(signature), body(body) {}
 	       
 	  Symbol call(Symbols&);
      };
+
+     
+     
 }

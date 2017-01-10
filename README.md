@@ -5,7 +5,7 @@
 Consists of several main classes:
 - Reader
 - Evaluator
-- Environment
+- Repository
 - Symbol
 - Function
 
@@ -13,7 +13,7 @@ Reader responces for reading code and wrapping it in Symbols.
 
 Evaluator responces for controlling the process of evaluation.
 
-Environment responces for controlling the name=>symbol interpretation.
+Repository responces for symbols interpretation.
 
 Symbol responces for keeping data inside.
 
@@ -31,6 +31,7 @@ This behaviour is needed for reader to firstly deside, what symbols look like.
 
 Functions can be either builtin/user-defined or special forms. Special forms are not evaluated but called the same way as functions (via call(Symbols) method).
 
-*** Repository
+***
 
-Repository responces for keeping all values inside. For variables it is used as Environment<string, Value>. 
+All builtins and specials are implemented in lib namespace
+User-defined functions wrap into Symbol::Value and can be kept in Repository

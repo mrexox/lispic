@@ -20,4 +20,10 @@ namespace lispic
 	  virtual Symbol call(Symbols& args) = 0;
 	  virtual ~Function() {}
      };
+
+     class call_error : public lispic_error
+     {
+     public:
+	 call_error(const std::string msg) : lispic_error(msg) {}
+     };
 }
