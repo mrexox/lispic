@@ -14,6 +14,7 @@
 #include "function.h"
 #include "user_func.h"
 #include "builtin_func.h"
+#include "lib.h"
 
 namespace lispic
 {
@@ -47,21 +48,10 @@ namespace lispic
 	  Symbol::Value get_special(std::string);
 	  void set(std::string, Symbol::Value);
 
-	  friend Symbol set_var(Symbols&);
-	  friend Symbol def(Symbols&);
-	  friend Symbol lambda(Symbols&);
-	  
+	  friend Symbol lib::set(Symbols&);
+	  friend Symbol lib::def(Symbols&);
+	  friend Symbol lib::lambda(Symbols&);
+	  friend Symbol lib::have(Symbols&);
      };
-     // Specials
-     Symbol set_var(Symbols&);
-     Symbol def(Symbols&);
-     Symbol lambda(Symbols&);
-     
-     // Builtins
-     Symbol sum(Symbols&);
-     Symbol print(Symbols&);
-     Symbol println(Symbols&);
-     Symbol concat(Symbols&);
-
 
 }

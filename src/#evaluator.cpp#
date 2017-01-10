@@ -125,7 +125,7 @@ namespace lispic {
 	  args.assign(list.begin()+1, list.end());
 	  return pf->call(args);
      }
-
+     
      bool Evaluator::is_special(std::string name)
      {	  
 	  return Repository::Get().has_special(name);

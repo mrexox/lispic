@@ -5,16 +5,27 @@ namespace lispic
      
      Repository::Repository()
      {
-	  variables.push_back(VariablesEnvironment());
+	  VariablesEnvironment ve;
+	  ve["nil"] = Symbol::Value();
 	  
-	  builtins["sum"] = new BuiltinFunction(sum);
-	  builtins["print"] = new BuiltinFunction(print);
-	  builtins["println"] = new BuiltinFunction(println);
-	  builtins["concat"] = new BuiltinFunction(concat);
-	  builtins["set"] = new BuiltinFunction(set_var);
+	  variables.push_back(ve);
 	  
-	  specials["def"] = new SpecialFunction(def);
-	  specials["lambda"] = new SpecialFunction(lambda);
+	  builtins["+"] = new BuiltinFunction(lib::sum);
+	  builtins["-"] = new BuiltinFunction(lib::subtract);
+	  builtins["*"] = new BuiltinFunction(lib::product);
+	  builtins["/"] = new BuiltinFunction(lib::devide);
+	  builtins["null"] = new BuiltinFunction(lib::null);
+	  builtins[">"] = new BuiltinFunction(lib::more);
+	  builtins["print"] = new BuiltinFunction(lib::print);
+	  builtins["println"] = new BuiltinFunction(lib::println);
+	  builtins["concat"] = new BuiltinFunction(lib::concat);
+	  builtins["set"] = new BuiltinFunction(lib::set);
+	  builtins["not"] = new BuiltinFunction(lib::_not);
+	  
+	  specials["def"] = new SpecialFunction(lib::def);
+	  specials["lambda"] = new SpecialFunction(lib::lambda);
+	  specials["if"] = new SpecialFunction(lib::if_statement);
+	  specials["have"] = new SpecialFunction(lib::have);
      }
 
      Repository::~Repository()
@@ -76,88 +87,5 @@ namespace lispic
      void Repository::set(std::string name, Symbol::Value value)
      {
 	  variables.back()[name] = value;
-     }
-
-     Symbol sum(Symbols& symbols)
-     {
-	  Number res = 0;
-	  for (Symbols::const_iterator p = symbols.begin();
-	       p != symbols.end();
-	       ++p)
-	  {
-	       res += p->value().number();
-	  }
-	  return Symbol(std::to_string(res), Symbol::Value(res));
-     }
-     
-     Symbol print(Symbols& symbols)
-     {
-	  for(Symbols::iterator p = symbols.begin();
-	      p != symbols.end();
-	      ++p)
-	  {
-	       std::cout << p->value();
-	       if (p + 1 != symbols.end()) std::cout << ' ';
-	  }
-	  return Symbol();
-     }
-
-     Symbol println(Symbols& symbols)
-     {
-	  Symbol s = print(symbols);
-	  std::cout << std::endl;
-	  return s;
-     }
-     
-     Symbol concat(Symbols& symbols)
-     {
-	  std::string res;
-	  for (Symbols::const_iterator p = symbols.begin();
-	       p != symbols.end();
-	       ++p)
-	  {
-	       res += p->value().string();
-	  }
-	  return Symbol('\"' + res + '\"', Symbol::Value(res));
-     }
-     
-     
-
-     Symbol set_var(Symbols& symbols)
-     {
-	  for (Symbols::iterator p = symbols.begin();
-	       p < symbols.end();
-	       p += 2)
-	  {
-	       Symbols s {*(p+1)};
-	       Symbol tmpsym = Evaluator::Get().eval( s );
-
-	       Repository::Get().variables.back()[p->name()] = tmpsym.value();
-	  }
-	  return symbols.back();
-     }
-
-     Symbol def(Symbols& symbols)
-     {
-	  Symbol res;
-	  for (Symbols::iterator p = symbols.begin();
-	       p < symbols.end();
-	       p += 2)
-	  {
-	       Symbols s {*(p+1)};
-	       res = Evaluator::Get().eval( s );
-	       Repository::Get().variables.back()[p->name()] = res.value();
-	  }
-	  return res;
-     }
-
-     
-     Symbol lambda(Symbols& symbols)
-     {
-	  Symbols body, signature;
-	  body.assign(symbols.begin()+1, symbols.end());
-	  signature = symbols.at(0).list();
-	  UserFunction* uf = new UserFunction(signature, body);
-	  return Symbol("lambda", uf);
      }
 }

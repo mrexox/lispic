@@ -11,7 +11,7 @@ namespace lispic
      enum Type
      {
 	  NUMBER, STRING,
-	  FUNCTION, NIL,
+	  FUNCTION, NIL, T,
 	  LIST, ATOM,
      };
 
@@ -32,6 +32,15 @@ namespace lispic
 			 _number = 0;
 			 _string = "";
 		    }
+	       Value(bool boolean)
+		    {
+			 if (boolean)
+			 {
+			      _type = T;
+			 } else {
+			      _type = NIL;
+			 }
+		    }
 	       Value(Symbols list) : _list(list) { _type = LIST; }
 	       Value(std::string str) : _string(str) { _type = STRING; }
 	       Value(Number num) : _number(num) { _type = NUMBER; }
@@ -47,7 +56,6 @@ namespace lispic
 	       std::string string() const { return _string; }
 	       Number number() const { return _number; }
 	       Symbols& list()  { return _list; }
-	       
 	       friend std::ostream& operator << (std::ostream&, Symbol::Value&);
 	       
 //	       operator Number () { return _number; }
@@ -57,7 +65,8 @@ namespace lispic
 	  std::string _name;
 	  Value _value;
      public:
-	  Symbol() : _value() { _name = "nil"; }
+	  Symbol() {}
+	  Symbol(bool v) : _value(v) {if (v) _name = "t"; else _name = "nil";}
 	  Symbol(std::string name) : _name(name) {}
 	  Symbol(Symbols symbols) : _value(symbols) {}
 	  Symbol(std::string name, Value value) : _name(name), _value(value) {}
@@ -84,4 +93,7 @@ namespace lispic
      std::ostream& operator << (std::ostream& out, const Symbol& s);
      std::ostream& operator << (std::ostream&, Symbols&);
      std::ostream& operator << (std::ostream& out, const Symbol::Value& value);
+     bool operator < (const Symbol::Value&, const Symbol::Value&);
+     bool operator == (const Symbol::Value&, const Symbol::Value&);
+     bool operator <= (const Symbol::Value& , const Symbol::Value& );
 }
