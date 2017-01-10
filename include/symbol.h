@@ -35,7 +35,12 @@ namespace lispic
 	       Value(Symbols list) : _list(list) { _type = LIST; }
 	       Value(std::string str) : _string(str) { _type = STRING; }
 	       Value(Number num) : _number(num) { _type = NUMBER; }
-	       Value(Function* pfunction) : _pfunction(pfunction) { _type = FUNCTION; }
+	       Value(Function* p_function) : _pfunction(p_function) { _type = FUNCTION; }
+	       // ~Value()
+	       // 	    {
+	       // 		 if ( _pfunction )
+	       // 		      delete _pfunction;
+	       // 	    }
 	       
 	       Type type() const { return _type; }
 	       Function* pfunction()  { return _pfunction; }

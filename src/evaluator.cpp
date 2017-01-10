@@ -18,10 +18,10 @@ namespace lispic {
 	  return result;
      }
      
-     Symbol Evaluator::eval(Symbol& symbol)
-     {
-	  return eval_symbol(symbol);
-     }
+     // Symbol Evaluator::eval(Symbol& symbol)
+     // {
+     // 	  return eval_symbol(symbol);
+     // }
      
      Symbol Evaluator::do_this_list(Symbols& list)
      {
@@ -91,7 +91,7 @@ namespace lispic {
 	       throw eval_error(symbol.name()
 				+ " is not a number but supposed to be so");
 	  } catch (const std::out_of_range& oor) {
-	       throw eval_error("Cannot convert to double: " + symbol.name());
+	       throw eval_error("Cannot convert to Number: " + symbol.name());
 	  }
 	  return symbol;
      }

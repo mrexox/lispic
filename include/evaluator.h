@@ -10,7 +10,6 @@
 #include "symbol.h"
 #include "repository.h"
 #include "function.h"
-#include "special_func.h"
 
 namespace lispic
 {
@@ -25,7 +24,7 @@ namespace lispic
 	       }
 
 	  Symbol eval(Symbols&);
-	  Symbol eval(Symbol&);
+
      private:
 	  Evaluator() {}
 	  Evaluator(Evaluator&) {}

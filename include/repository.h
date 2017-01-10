@@ -14,7 +14,6 @@
 #include "function.h"
 #include "user_func.h"
 #include "builtin_func.h"
-#include "special_func.h"
 
 namespace lispic
 {
@@ -24,6 +23,7 @@ namespace lispic
 	  ~Repository();
 	  Repository(const Repository&) = delete;
 	  Repository& operator=(const Repository&) = delete;
+	  typedef BuiltinFunction SpecialFunction;
 	  
 	  typedef Environment<std::string, Symbol::Value> VariablesEnvironment;
 	  typedef Environment<std::string, BuiltinFunction*> BuiltinMap;
@@ -32,7 +32,7 @@ namespace lispic
 	  BuiltinMap builtins;
 	  SpecialMap specials;
 	  Variables variables;
-	  
+	  friend class UserFunction;
      public:
 	  
 	  static Repository& Get()

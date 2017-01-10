@@ -1,16 +1,15 @@
 #pragma once
-#include "stdafx.h"
 #include "symbol.h"
 #include "function.h"
 
 namespace lispic
 {
-     typedef Symbol (*builtin)(Symbols&);
+ 
      
      class BuiltinFunction : public virtual Function
      {
+	  typedef Symbol (*builtin)(Symbols&);
 	  builtin function;
-	  std::string name;
      public:
 	  BuiltinFunction(builtin function)
 	       : function(function) {}

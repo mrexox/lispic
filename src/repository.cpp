@@ -11,10 +11,10 @@ namespace lispic
 	  builtins["print"] = new BuiltinFunction(print);
 	  builtins["println"] = new BuiltinFunction(println);
 	  builtins["concat"] = new BuiltinFunction(concat);
+	  builtins["set"] = new BuiltinFunction(set_var);
 	  
-	  specials["set"] = new SpecialFunction(set_var);
-	  // specials["def"] = new SpecialFunction(def);
-	  // specials["lambda"] = new SpecialFunction(lambda);
+	  specials["def"] = new SpecialFunction(def);
+	  specials["lambda"] = new SpecialFunction(lambda);
      }
 
      Repository::~Repository()
@@ -122,26 +122,42 @@ namespace lispic
      }
      
      
+
      Symbol set_var(Symbols& symbols)
      {
 	  for (Symbols::iterator p = symbols.begin();
 	       p < symbols.end();
 	       p += 2)
 	  {
-	       Symbol tmpsym = Evaluator::Get().eval( *(p+1) );
+	       Symbols s {*(p+1)};
+	       Symbol tmpsym = Evaluator::Get().eval( s );
+
 	       Repository::Get().variables.back()[p->name()] = tmpsym.value();
 	  }
 	  return symbols.back();
      }
 
-     // Symbol def(Symbols& symbols){}
-     // Symbol lambda(Symbols& symbols){}
-	  /*
-	    UserFunction with no name
-	    (lambda (arg1 arg2 ...) (body...))
-	    symbols:
-	      symbols - args
-	      symbols - body:
-	        
-	   */
+     Symbol def(Symbols& symbols)
+     {
+	  Symbol res;
+	  for (Symbols::iterator p = symbols.begin();
+	       p < symbols.end();
+	       p += 2)
+	  {
+	       Symbols s {*(p+1)};
+	       res = Evaluator::Get().eval( s );
+	       Repository::Get().variables.back()[p->name()] = res.value();
+	  }
+	  return res;
+     }
+
+     
+     Symbol lambda(Symbols& symbols)
+     {
+	  Symbols body, signature;
+	  body.assign(symbols.begin()+1, symbols.end());
+	  signature = symbols.at(0).list();
+	  UserFunction* uf = new UserFunction(signature, body);
+	  return Symbol("lambda", uf);
+     }
 }
