@@ -6,14 +6,15 @@ namespace lispic
      Repository::Repository()
      {
 	  VariablesEnvironment ve;
-	  ve["nil"] = Symbol::Value();
-	  
+	  ve["nil"] = Symbol::Value(false);
+	  ve["t"] = Symbol::Value(true);
 	  variables.push_back(ve);
 	  
 	  builtins["+"] = new BuiltinFunction(lib::sum);
 	  builtins["-"] = new BuiltinFunction(lib::subtract);
 	  builtins["*"] = new BuiltinFunction(lib::product);
 	  builtins["/"] = new BuiltinFunction(lib::devide);
+	  builtins["%"] = new BuiltinFunction(lib::modul);
 	  builtins["null"] = new BuiltinFunction(lib::null);
 	  builtins[">"] = new BuiltinFunction(lib::more);
 	  builtins["print"] = new BuiltinFunction(lib::print);
@@ -21,6 +22,12 @@ namespace lispic
 	  builtins["concat"] = new BuiltinFunction(lib::concat);
 	  builtins["set"] = new BuiltinFunction(lib::set);
 	  builtins["not"] = new BuiltinFunction(lib::_not);
+	  builtins["equal"] = new BuiltinFunction(lib::equal);
+	  builtins["list"] = new BuiltinFunction(lib::list);
+	  builtins["car"] = new BuiltinFunction(lib::car);
+	  builtins["cdr"] = new BuiltinFunction(lib::cdr);
+	  builtins["map"] = new BuiltinFunction(lib::map);
+	  
 	  
 	  specials["def"] = new SpecialFunction(lib::def);
 	  specials["lambda"] = new SpecialFunction(lib::lambda);

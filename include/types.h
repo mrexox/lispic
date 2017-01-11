@@ -4,12 +4,7 @@
 namespace lispic
 {
      typedef double Number;
-     typedef std::vector<Number> Numbers;
-     typedef Number (*num_func)(Numbers);
-     /*    Number ston(std::string str) {
-	  return std::stod(str);
-	  }*/
-     
+    
      enum SUGAR : char {
 	  LP = '(',
 	       RP = ')',
@@ -20,6 +15,7 @@ namespace lispic
 	       SPACE = ' ',
 	       COMMENT = ';',
 	       };
+
      class lispic_error : public std::logic_error
      {
      public:

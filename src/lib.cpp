@@ -19,16 +19,34 @@ namespace lispic
 	       return Symbol(std::to_string(res), Symbol::Value(res));
 	  }
 
+	  Symbol modul(Symbols& symbols)
+	  {
+	       if (symbols.size() != 2)
+		    throw call_error("%: must have 2 argument");
+	       Number res = static_cast<int>(symbols.begin()->value().number())
+		    % static_cast<int>((symbols.begin() + 1)->value().number());
+	       return Symbol(std::to_string(res), Symbol::Value(res));
+	  }
+	  
 	  Symbol subtract(Symbols& symbols)
 	  {
+	       if (symbols.size() == 0)
+		    throw call_error("-: must have at least 1 argument");
+
 	       Number res = symbols.begin()->value().number();
-	       for (Symbols::const_iterator p = symbols.begin() + 1;
-		    p != symbols.end();
-		    ++p)
-	       {
-		    if (p->type() != NUMBER)
-			 throw call_error("-: " + p->name() + " is not a number!");
-		    res -= p->value().number();
+	       if (symbols.size() == 1) {
+		    res = -res;
+		    
+	       } else {
+		    
+		    for (Symbols::const_iterator p = symbols.begin() + 1;
+			 p != symbols.end();
+			 ++p)
+		    {
+			 if (p->type() != NUMBER)
+			      throw call_error("-: " + p->name() + " is not a number!");
+			 res -= p->value().number();
+		    }
 	       }
 	       return Symbol(std::to_string(res), Symbol::Value(res));
 	  }
@@ -49,6 +67,8 @@ namespace lispic
      
 	  Symbol devide(Symbols& symbols)
 	  {
+	       if (symbols.size() == 0)
+		    throw call_error("/: must have at least 1 argument");
 	       Number res = symbols.begin()->value().number();
 	       for (Symbols::const_iterator p = symbols.begin() + 1;
 		    p != symbols.end();
@@ -87,6 +107,22 @@ namespace lispic
 	       else
 		    return Symbol(false);
 	  }
+
+	  Symbol equal(Symbols& symbols)
+	  {
+	       for (Symbols::iterator one = symbols.begin();
+		    one != symbols.end();
+		    ++one)
+	       {
+		    for (Symbols::iterator two = one;
+			 two != symbols.end();
+			 ++two)
+		    {
+			 if (one->value() != two->value()) return Symbol(false);
+		    }
+	       }
+	       return Symbol(true);
+	  }
 	  
 	  Symbol more(Symbols& symbols)
 	  {
@@ -112,7 +148,44 @@ namespace lispic
 	       std::cout << std::endl;
 	       return s;
 	  }
-     
+	  
+	  Symbol list(Symbols& symbols)
+	  {
+	       return Symbol(symbols);
+	  }
+
+	  Symbol car(Symbols& symbols)
+	  {
+	       if (symbols.size() != 1)
+		    throw call_error("car: must be used like this (car list)");
+	       return *symbols.begin()->value().list().begin();
+	  }
+	  
+	  Symbol cdr(Symbols& symbols)
+	  {
+	       if (symbols.size() != 1)
+		    throw call_error("cdr: must be used like this (car list)");
+	       Symbols& lst = symbols.begin()->value().list();
+	       Symbols cdrs; cdrs.assign(lst.begin()+1, lst.end());
+	       return Symbol(cdrs);
+	  }
+	  
+	  Symbol map(Symbols& symbols)
+	  {
+	       // ПОЛИМОРФИЗМ
+	       Function* function = symbols.begin()->value().pfunction();
+	       Symbols lst = (symbols.begin() + 1)->value().list();
+	       Symbols res;
+	       for (Symbols::iterator p = lst.begin();
+		    p != lst.end();
+		    ++p)
+	       {
+		    Symbols args { *p };
+		    res.push_back(function->call(args));
+	       }
+	       return Symbol(res);
+	  }
+	  
 	  Symbol concat(Symbols& symbols)
 	  {
 	       std::string res;
@@ -155,14 +228,24 @@ namespace lispic
 	  Symbol def(Symbols& symbols)
 	  {
 	       Symbol res;
+	       std::string not_variables;
+	       Evaluator& ev = Evaluator::Get();
 	       for (Symbols::iterator p = symbols.begin();
 		    p < symbols.end();
 		    p += 2)
 	       {
 		    Symbols s {*(p+1)};
-		    res = Evaluator::Get().eval( s );
+		    res = ev.eval( s );
+		    if (ev.like_num(*p) || ev.like_str(*p)) {
+			 not_variables += p->name() + " ";
+			 continue;
+		    }
 		    Repository::Get().variables.back()[p->name()] = res.value();
 	       }
+	       if ( not_variables.length() ) {
+		    throw call_error("def: " + not_variables + "do not look like variables. They were not defined.");
+	       }
+		    
 	       return res;
 	  }
 

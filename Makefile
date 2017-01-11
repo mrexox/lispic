@@ -1,36 +1,36 @@
 CC = g++
 OUT = lispic
-INCLUDE = ./include
-CFLAGS = -Wall -g -std=c++11 -I$(INCLUDE)
+INC = ./include
+CFLAGS = -Wall -g -std=c++11 -I$(INC)
 SRC = ./src
 OBJ = ./obj
 
-lispic: main.o
-
-main.o: evaluator.o reader.o $(SRC)/main.cpp 
-	$(CC) $(CFLAGS)  -o $(OBJ)/main.o -c $(SRC)/main.cpp 
 
 
-evaluator.o: symbol.o environments.o $(SRC)/evaluator.cpp $(INCLUDE)/evaluator.h $(INCLUDE)/stdafx.h
-	$(CC) $(CFLAGS) -o $(OBJ)/evaluator.o  -c $(SRC)/evaluator.cpp 
+$(OBJ)/main.o: $(OBJ)/evaluator.o $(OBJ)/reader.o $(SRC)/main.cpp 
+	$(CC) $(CFLAGS) -c $(SRC)/main.cpp -o $(OBJ)/main.o 
 
-environments.o: symbol.o environment.o builtin.o user_function.o $(SRC)/environments.cpp $(INCLUDE)/environments.h
-	$(CC) $(CFLAGS) -o $(OBJ)/environments.o -c $(SRC)/environments.cpp
+$(OBJ)/reader.o: $(INC)/reader.h $(SRC)/reader.cpp
+	$(CC) $(CFLAGS) -c $(SRC)/reader.cpp -o $(OBJ)/reader.o
 
-builtin.o: $(SRC)/biltin.cpp $(INCLUDE)/builtin.h $(INCLUDE)/function.h
-	$(CC) $(CFLAGS) -o $(OBJ)/builtin.o -c $(SRC)/builtin.cpp
+$(OBJ)/repository.o: $(INC)/repository.h $(SRC)/repository.cpp $(OBJ)/lib.o
+	$(CC) $(CFLAGS) -c $(SRC)/repository.cpp -o $(OBJ)/repository.o
 
-user_function.o:  $(SRC)/user_function.cpp $(INCLUDE)/user_function.h $(INCLUDE)/function.h
-	$(CC) $(CFLAGS) -o $(OBJ)/user_function.o -c $(SRC)/user_function.cpp
+$(OBJ)/lib.o: $(INC)/lib.h $(SRC)/lib.cpp
+	$(CC) $(CFLAGS) -c $(SRC)/lib.cpp -o $(OBJ)/lib.o
 
-environment.o: symbol.o $(INCLUDE)/environment.h
-	$(CC) $(CFLAGS) -o $(OBJ)/environment.o -c $(INCLUDE)/environment.h
+$(OBJ)/evaluator.o: $(INC)/evaluator.h $(SRC)/evaluator.cpp 
+	$(CC) $(CFLAGS) -c $(SRC)/evaluator.cpp -o $(OBJ)/evaluator.o
 
-reader.o: symbol.o $(SRC)/reader.cpp $(INCLUDE)/reader.h $(INCLUDE)/stdafx.h
-	$(CC) $(CFLAGS) -o $(OBJ)/reader.o -c $(SRC)/reader.cpp
+$(OBJ)/symbol.o: $(INC)/symbol.h $(SRC)/symbol.cpp 
+	$(CC) $(CFLAGS) -c $(SRC)/symbol.cpp -o $(OBJ)/symbol.o
 
-symbol.o: $(INCLUDE)/symbol.h
-	$(CC) $(CFLAGS) -o $(OBJ)/symbol.o -c $(SRC)/symbol.cpp 
+$(OBJ)/user_func.o: $(INC)/user_func.h $(SRC)/user_func.cpp
+	$(CC) $(CFLAGS) -c $(SRC)/user_func.cpp -o $(OBJ)/user_func.o
+
+lispic: $(OBJ)/main.o $(OBJ)/reader.o $(OBJ)/repository.o $(OBJ)/lib.o $(OBJ)/evaluator.o $(OBJ)/symbol.o $(OBJ)/user_func.o
+	$(CC) $(CFLAGS) -o lispic $(OBJ)/main.o $(OBJ)/reader.o $(OBJ)/repository.o $(OBJ)/lib.o $(OBJ)/evaluator.o $(OBJ)/symbol.o $(OBJ)/user_func.o
 
 clear:
-	find . -name *~ -exec rm '{}' +
+	rm *~ -f
+	rm */*~ -f

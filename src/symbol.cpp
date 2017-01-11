@@ -4,51 +4,19 @@ namespace lispic
 {
      std::ostream& operator << (std::ostream& out, const Symbol& symbol)
      {
-	  switch(symbol.type())
-	  {
-	  case NUMBER:
-	       out << symbol._value.number();
-	       break;
-	  case STRING:
-	       out << '\"' << symbol._value.string() << '\"';
-	       break;
-	  case FUNCTION:
-	       out << "#<Function " + symbol.name() + ">";
-	       break;
-	  case T:
-	       out << "t";
-	       break;
-	  case NIL:
-	       out << "nil";
-	       break;
-	  case LIST:
-	       out << "(";
-	       for (Symbols::iterator p = symbol.value().list().begin();
-		    p != symbol.value().list().end();
-		    ++p)
-	       {
-		    out << *p;
-		    if (p + 1 != symbol.value().list().end()) out << " ";
-	       }
-	       out << ")";
-	       break;
-	  default:
-	       out << "!Error, not initialized symbol!";
-	       break;
-	  }
-	  return out;
+	  return out << symbol._value;
 
      }
 
      std::ostream& operator << (std::ostream& out, const Symbol::Value& value)
      {
-	  switch(value.type())
+	  switch(value._type)
 	  {
 	  case NUMBER:
-	       out << value.number();
+	       out << value._number;
 	       break;
 	  case STRING:
-	       out << value.string();
+	       out << value._string;
 	       break;
 	  case NIL:
 	       out << "NIL";
@@ -56,10 +24,18 @@ namespace lispic
 	  case T:
 	       out << "T";
 	       break;
+	  case LIST:
+	       out << "(";
+	       for (Symbols::const_iterator p = value._list.begin();
+		    p != value._list.end();
+		    ++p)
+	       {
+		    out << *p;
+		    if (p + 1 != value._list.end()) out << " ";
+	       }
+	       out << ")";
+	       break;
 	  default:
-	       out << "#<Value: number=" << value.number()
-		   << " string=" << value.string()
-		   << " type=" << value.type();
 	       break;
 	  }
 	  return out;
@@ -70,16 +46,55 @@ namespace lispic
 	  if (v1.type() == NUMBER)
 	       return v1.number() < v2.number();
 	  // may be changed to used with strings
+	  switch(v1.type())
+	  {
+	  case NUMBER:
+	       return v1.number() <= v2.number();
+	       break;
+	  case STRING:
+	       return v1.string() <= v2.string();
+	       break;
+	  case T:
+	  case NIL:
+	       return false;
+	       break;
+	  case LIST:
+	       // Not Implemented yet
+	  default:
+	       break;
+	  }
 	  return false;
      }
      
      bool operator == (const Symbol::Value& v1, const Symbol::Value& v2)
      {
-	  if (v1.type() == NUMBER)
+	  if (v1.type() != v2.type()) return false;
+	  
+	  switch(v1.type())
+	  {
+	  case NUMBER:
 	       return v1.number() == v2.number();
-	  // may be changed to used with strings
+	       break;
+	  case STRING:
+	       return v1.string() == v2.string();
+	       break;
+	  case T:
+	  case NIL:
+	       return true;
+	       break;
+	  case LIST:
+	       // Not Implemented yet
+	  default:
+	       break;
+	  }
 	  return false;
      }
+
+     bool operator != (const Symbol::Value& v1, const Symbol::Value& v2)
+     {
+     	  return !(v1 == v2);
+     }
+
 
      bool operator <= (const Symbol::Value& v1, const Symbol::Value& v2)
      {

@@ -25,6 +25,8 @@
 #include <exception>
 #include <stdexcept>
 
+// For main.cpp
+#include <string.h> // strcmp
 #include "types.h"
 
 #define STRICT

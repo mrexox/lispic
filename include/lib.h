@@ -15,6 +15,7 @@ namespace lispic
 	  
 	  // Builtins
 	  Symbol sum(Symbols&);
+	  Symbol modul(Symbols&);
 	  Symbol print(Symbols&);
 	  Symbol println(Symbols&);
 	  Symbol concat(Symbols&);
@@ -26,5 +27,11 @@ namespace lispic
 	  Symbol less(Symbols&);
 	  Symbol equal(Symbols&);
 	  Symbol _not(Symbols&);
+	  Symbol equal(Symbols&);
+	  // List's bultins
+	  Symbol list(Symbols&);
+	  Symbol car(Symbols&);
+	  Symbol cdr(Symbols&);
+	  Symbol map(Symbols&);
      }
 }

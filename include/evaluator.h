@@ -10,7 +10,7 @@
 #include "symbol.h"
 #include "repository.h"
 #include "function.h"
-
+#include "lib.h" // for lib::set and lib::def
 namespace lispic
 {
      
@@ -42,8 +42,8 @@ namespace lispic
 	  Symbol make_function_call(Symbols&);
 	  Symbol make_special_call(Symbols&);
 
-	  friend Symbol set(Symbols&);
-	  friend Symbol def(Symbols&);
+	  friend Symbol lib::set(Symbols&);
+	  friend Symbol lib::def(Symbols&);
      };
 
      class eval_error : public lispic_error {
