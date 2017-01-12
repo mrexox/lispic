@@ -1,4 +1,5 @@
 #include "repository.h"
+#include "reader.h"
 
 namespace lispic
 {
@@ -28,6 +29,8 @@ namespace lispic
 	  Symbol equal(Symbols&);
 	  Symbol _not(Symbols&);
 	  Symbol equal(Symbols&);
+	  Symbol load(Symbols&);
+	  
 	  // List's bultins
 	  Symbol list(Symbols&);
 	  Symbol car(Symbols&);

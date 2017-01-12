@@ -17,8 +17,7 @@ namespace lispic
 	  // {
 	  //      Symbol::Value set(std::string&, Symbol::Value&);
 	  // };
-	  typedef Symbol (*user_function)(Symbols&);
-	  user_function function;
+	  
 	  Symbols signature;
 	  Symbols body;
 	  

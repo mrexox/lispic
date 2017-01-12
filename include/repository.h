@@ -24,16 +24,16 @@ namespace lispic
 	  ~Repository();
 	  Repository(const Repository&) = delete;
 	  Repository& operator=(const Repository&) = delete;
-	  typedef BuiltinFunction SpecialFunction;
-	  
+	  typedef BuiltinFunction CompiledFunction;
 	  typedef Environment<std::string, Symbol::Value> VariablesEnvironment;
-	  typedef Environment<std::string, BuiltinFunction*> BuiltinMap;
-	  typedef Environment<std::string, SpecialFunction*> SpecialMap;
+	  typedef Environment<std::string, Function*> CompiledMap;
+	  typedef std::vector<std::string> Specials;
 	  typedef std::vector<VariablesEnvironment> Variables;
-	  BuiltinMap builtins;
-	  SpecialMap specials;
+	  Specials specials;
+	  CompiledMap compiled;
 	  Variables variables;
 	  friend class UserFunction;
+	  void init_functions(const std::map<std::string, BuiltinFunction::builtin>&);
      public:
 	  
 	  static Repository& Get()

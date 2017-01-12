@@ -103,3 +103,9 @@
      lst)
 
 (println)
+(test "load function")
+(def lib-path "/home/ian/pr/cpp/lispic/test-lispic/lib.lisp")
+(if (not (load lib-path))
+    (println "loaded..." lib-path))
+(say-hello)
+

@@ -21,7 +21,7 @@
 
 // Repository needs
 #include <stack>
-
+#include <algorithm>
 #include <exception>
 #include <stdexcept>
 

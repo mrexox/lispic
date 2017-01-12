@@ -240,7 +240,7 @@ namespace lispic
 			 not_variables += p->name() + " ";
 			 continue;
 		    }
-		    Repository::Get().variables.back()[p->name()] = res.value();
+		    Repository::Get().set(p->name(), res.value());
 	       }
 	       if ( not_variables.length() ) {
 		    throw call_error("def: " + not_variables + "do not look like variables. They were not defined.");
@@ -335,6 +335,24 @@ namespace lispic
 	       }
 	       rep.variables.pop_back();
 	       return result;
+	  }
+
+	  Symbol load(Symbols& symbols)
+	  {
+	       for (Symbols::iterator path = symbols.begin();
+		    path != symbols.end();
+		    ++path)
+	       {
+		    std::ifstream file(path->value().string());
+		    if (file.is_open()) {
+			 Symbols prog = Reader::Get().read(file, FROM_FILE);
+			 Evaluator::Get().eval(prog);
+			 file.close();
+		    } else {
+			 throw call_error("Error while opening " + path->name());
+		    }
+	       }
+	       return Symbol(false);
 	  }
      }
 }

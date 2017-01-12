@@ -1,5 +1,4 @@
 #include "repository.h"
-
 namespace lispic
 {
      
@@ -10,47 +9,49 @@ namespace lispic
 	  ve["t"] = Symbol::Value(true);
 	  variables.push_back(ve);
 	  
-	  builtins["+"] = new BuiltinFunction(lib::sum);
-	  builtins["-"] = new BuiltinFunction(lib::subtract);
-	  builtins["*"] = new BuiltinFunction(lib::product);
-	  builtins["/"] = new BuiltinFunction(lib::devide);
-	  builtins["%"] = new BuiltinFunction(lib::modul);
-	  builtins["null"] = new BuiltinFunction(lib::null);
-	  builtins[">"] = new BuiltinFunction(lib::more);
-	  builtins["print"] = new BuiltinFunction(lib::print);
-	  builtins["println"] = new BuiltinFunction(lib::println);
-	  builtins["concat"] = new BuiltinFunction(lib::concat);
-	  builtins["set"] = new BuiltinFunction(lib::set);
-	  builtins["not"] = new BuiltinFunction(lib::_not);
-	  builtins["equal"] = new BuiltinFunction(lib::equal);
-	  builtins["list"] = new BuiltinFunction(lib::list);
-	  builtins["car"] = new BuiltinFunction(lib::car);
-	  builtins["cdr"] = new BuiltinFunction(lib::cdr);
-	  builtins["map"] = new BuiltinFunction(lib::map);
-	  
-	  
-	  specials["def"] = new SpecialFunction(lib::def);
-	  specials["lambda"] = new SpecialFunction(lib::lambda);
-	  specials["if"] = new SpecialFunction(lib::if_statement);
-	  specials["have"] = new SpecialFunction(lib::have);
-	  specials["cycle"] = new SpecialFunction(lib::cycle);
-	  specials["undef"] = new SpecialFunction(lib::undef);
-     }
+	  init_functions({
+		    // Builtins
+		    {"+", lib::sum }, {"-", lib::subtract },
+		    {"*", lib::product }, {"/", lib::devide },
+		    {"%", lib::modul }, {"null", lib::null },
+		    {">" , lib::more }, {"print", lib::print },
+		    {"println", lib::println }, {"concat", lib::concat },
+		    {"set", lib::set }, {"not", lib::_not },
+		    {"equal", lib::equal }, {"list", lib::list },
+		    {"car", lib::car }, {"cdr", lib::cdr },
+		    {"map", lib::map }, {"load", lib::load},
 
+		    // Specials
+		    {"def", lib::def }, {"lambda", lib::lambda },
+		    {"if", lib::if_statement }, {"have", lib::have },
+		    {"cycle", lib::cycle }, {"undef", lib::undef },
+		
+			 });
+	  
+	  specials = {
+	       "def", "lambda",
+	       "if", "have",
+	       "cycle", "undef",
+	  };
+     }
+     
      Repository::~Repository()
      {
-	  for(BuiltinMap::iterator p = builtins.begin();
-	      p != builtins.end();
+	  for(CompiledMap::iterator p = compiled.begin();
+	      p != compiled.end();
 	      ++p)
 	  {
 	       if ( p->second ) delete p->second;
 	  }
+     }
 
-	  for(SpecialMap::iterator p = specials.begin();
-	      p != specials.end();
+     void Repository::init_functions(const std::map<std::string, CompiledFunction::builtin>& base)
+     {
+	  for(std::map<std::string, CompiledFunction::builtin>::const_iterator p = base.begin();
+	      p != base.end();
 	      ++p)
 	  {
-	       if ( p->second ) delete p->second;
+	       compiled[p->first] = new CompiledFunction(p->second);
 	  }
      }
      
@@ -62,7 +63,7 @@ namespace lispic
 	  {
 	       if (p->has(name)) return (*p)[name];
 	  }
-	  if (builtins.has(name)) return Symbol::Value(builtins.get(name));
+	  if (compiled.has(name)) return Symbol::Value(compiled.get(name));
 	  return Symbol::Value(); // Get NIL and catch an error!
      }
      
@@ -74,23 +75,13 @@ namespace lispic
 	  {
 	       if (p->has(name)) return true;
 	  }
-	  return builtins.has(name);
+	  return compiled.has(name);
      }
      
      bool Repository::has_special(std::string name)
      {
-	  SpecialMap::iterator p = specials.find(name);
+	  Specials::iterator p = std::find(specials.begin(), specials.end(), name);
 	  return p != specials.end();
-     }
-     
-     Symbol::Value Repository::get_special(std::string name)
-     {
-	  SpecialMap::iterator p = specials.find(name);
-	  if (p != specials.end())
-	  {
-	       return Symbol::Value(p->second);
-	  }
-	  else return Symbol::Value();
      }
      
      void Repository::set(std::string name, Symbol::Value value)

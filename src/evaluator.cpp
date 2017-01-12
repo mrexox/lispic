@@ -28,7 +28,7 @@ namespace lispic {
 	  if (list.empty()) return Symbol(false);
 	  if ( is_special(list.begin()->name()) )
 	  {
-	       list.begin()->set( Repository::Get().get_special( list.begin()->name() ));
+	       list.begin()->set( Repository::Get().get( list.begin()->name() ));
 	       return make_function_call( list );
 	  } else {
 	       Symbols evaled_list = eval_list( list ); 
