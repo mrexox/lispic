@@ -1,37 +1,45 @@
 = lispic - a small lisp interpreter
 
-*** Supposed to be built on OO design with concrete responcability on each class given.
+simply run
+# For interactive mode
+$ ./lispic -i
 
-Consists of several main classes:
-- Reader
-- Evaluator
-- Repository
-- Symbol
-- Function
+# For file interpreting
+$ ./lispic /directory/file-name.lisp
 
-Reader responces for reading code and wrapping it in Symbols.
+# For fast evaluating
+$ ./lispic -e '(+ 2017 (/ 90 5))'
 
-Evaluator responces for controlling the process of evaluation.
+= --- Language definition ---
 
-Repository responces for symbols interpretation.
+This is learning project. My aim was not to make a fully featured language but a simple lisp-like interpreter. Just for fun.
 
-Symbol responces for keeping data inside.
+; - stays for comments. The string after `;` is ignored
 
-Function responces for subroutines that may be called.
+Functions: +, -, /, %, *, concat, print, println - do what they used to do
 
-*** Terminology
+(def a 100) ; defining a variable
+(lambda (x) (+ x 1)) ; creating a function that takes 1 argument
+(def +1 (lambda (x) (+ x 1))) ; defining an increment
 
-NUMBER, STRING and FUNCTION are indeed ATOMs
-only LIST is not atomic.
+(if confition*
+    then*
+    else*	) ; condition with else clause
+or
+(if condition*
+    then*) ; condition without else clause
 
-This behaviour is needed for reader to firstly deside, what symbols look like.
-(Actually it's because in Symbols must be both atoms and lists, so I just suppose that a symbol may also be list. This dichotomy is an issue for further solution.)
+(cycle (var 0 (+1 var))
+       (> var 12)
+       (println var)) ; cycle, simple as piece of bread
 
-*** Functions
+(have f) ; check if symbol f exist in current context
+(null ()) ; check if symbol is null
+(list 1 2 3 4 5 "string") ; creating list
+(def *list* (list 1 23 4 5))
+(car *list) ; returns a copy of first element of *list*
+(cdr *list*) ; returns a list except first element
+(map f *list*) ; simple mapping through list with function f (that takes 1 argument)
 
-Functions can be either builtin/user-defined or special forms. Special forms are not evaluated but called the same way as functions (via call(Symbols) method).
-
-***
-
-All builtins and specials are implemented in lib namespace
-User-defined functions wrap into Symbol::Value and can be kept in Repository
+(load "/dir/file-name.lisp") ; evaluates the file, returns nil if succeed (t otherwise)
+= --- That's it ---
